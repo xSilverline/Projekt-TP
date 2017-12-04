@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class SetGui
 {
-    JFrame frame = new JFrame("Game");
+    JFrame frame = new JFrame();
     JLabel messageLabel = new JLabel("");
     ImageIcon icon;
     ImageIcon opponentIcon;
@@ -22,7 +22,8 @@ public class SetGui
         frame.getContentPane().add(boardPanel, "Center");
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(240, 160);
+        frame.setSize(640, 640);
+        frame.setLocation(100,100);
         frame.setVisible(true);
         frame.setResizable(true);
 
