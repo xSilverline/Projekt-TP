@@ -54,7 +54,7 @@ public class Client {
             response = in.readLine();
             if (response.startsWith("WELCOME"))
             {
-                setGui.messageLabel.setText(response + playerName);
+                setGui.messageLabel.setText("Welcome "+playerName);
                 setGui.frame.setTitle("Player " + playerName);
             }
             while (true)
