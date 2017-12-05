@@ -12,8 +12,8 @@ public class SetupWindow extends JDialog
         setTitle("Setup connection");
         setLayout( new FlowLayout() );
         JButton acceptButton = new JButton ("CONNECT");
-        JTextField hostField = new JTextField("localhost", 30);
-        JTextField playerField = new JTextField("Player", 30);
+        final JTextField hostField = new JTextField("localhost", 30);
+        final JTextField playerField = new JTextField("Player", 30);
         acceptButton.addActionListener ( new ActionListener()
         {
             public void actionPerformed( ActionEvent e )
