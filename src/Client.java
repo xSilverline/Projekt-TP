@@ -81,7 +81,7 @@ public class Client {
     private boolean wantsToPlayAgain() {
         int response = JOptionPane.showConfirmDialog(setGui.frame,
                 "Want to play again?",
-                "Chinese checkers Fun Fun Fun",
+                "Chinese checkers ",
                 JOptionPane.YES_NO_OPTION);
         setGui.frame.dispose();
         return response == JOptionPane.YES_OPTION;
