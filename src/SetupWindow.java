@@ -3,12 +3,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+
 public class SetupWindow extends JDialog
 {
 
     SetupWindow()
     {
         setModal(true);
+        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Setup connection");
         setLayout( new FlowLayout() );
         JButton acceptButton = new JButton ("CONNECT");
