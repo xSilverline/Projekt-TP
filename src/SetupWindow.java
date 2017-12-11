@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class SetupWindow extends JDialog
@@ -10,6 +11,7 @@ public class SetupWindow extends JDialog
 
     SetupWindow()
     {
+
         setModal(true);
         //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Setup connection");
