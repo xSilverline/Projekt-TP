@@ -1,4 +1,4 @@
-/**
+package sources; /**
  * The class for the helper threads in this multithreaded server
  * application.  A Player is identified by a playerName.
  * For communication with the
@@ -21,7 +21,7 @@ public class Player extends Thread {
     Socket socket;
     BufferedReader input;
     PrintWriter output;
-    //Boolean isReady;
+    Boolean isReady;
     int gameType=0;
 
     /**
