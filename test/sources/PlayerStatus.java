@@ -1,3 +1,5 @@
+package sources;
+
 public class PlayerStatus {
     String name;
     Boolean connected;

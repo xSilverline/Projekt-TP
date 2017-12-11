@@ -1,4 +1,4 @@
-import sun.font.GlyphDisposedListener;
+package sources;
 
 import javax.swing.*;
 import java.awt.*;

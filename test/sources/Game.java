@@ -1,3 +1,5 @@
+package sources;
+
 public class Game{
     int numberOfPlayers;
     Player currentPlayer;
