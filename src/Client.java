@@ -112,9 +112,9 @@ public class Client{
     private JButton exitButton;
 
     public class SetGui implements ActionListener{
-        {
+        SetGui(){
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setTitle(messageLabel.getText());
+            frame.setTitle("Chinese Checkers Game");
 
             //construct components
             logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);

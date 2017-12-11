@@ -14,6 +14,8 @@ public class SetupWindow extends JDialog
         JButton acceptButton = new JButton ("CONNECT");
         final JTextField hostField = new JTextField("localhost", 30);
         final JTextField playerField = new JTextField("Player", 30);
+        setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
+
         acceptButton.addActionListener ( new ActionListener()
         {
             public void actionPerformed( ActionEvent e )
