@@ -1,43 +1,36 @@
+
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 public class SetGui implements ActionListener {
     JFrame frame = new JFrame();
     JLabel messageLabel = new JLabel("");
 
-    private JLabel logoText;
-    private JLabel gameTypeText;
-    private JButton twoPlayerButton;
-    private JButton threePlayerButton;
-    private JButton fourPlayerButton;
-    private JButton sixPlayerButton;
     private JButton instructionButton;
     private JButton exitButton;
+    private JButton newGameButton;
+    private JButton joinGameButton;
 
-    private BufferedReader in;
     private PrintWriter out;
 
-    SetGui(BufferedReader in, PrintWriter out)
+    SetGui(PrintWriter out)
     {
         this.out=out;
-        this.in=in;
+
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle(messageLabel.getText());
 
         //construct components
-        logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);
-        gameTypeText = new JLabel("Play multiplayer:", SwingConstants.CENTER);
-        twoPlayerButton = new JButton("2 Players");
-        threePlayerButton = new JButton("3 Players");
-        fourPlayerButton = new JButton("4 Players");
-        sixPlayerButton = new JButton("6 Players");
+        JLabel logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);
+        JLabel gameTypeText = new JLabel("Play multiplayer:", SwingConstants.CENTER);
         instructionButton = new JButton("How to play?");
         exitButton = new JButton("Exit");
+        newGameButton = new JButton("New Game");
+        joinGameButton = new JButton("Join Game");
 
         logoText.setFont(logoText.getFont().deriveFont(54f));
         gameTypeText.setFont(gameTypeText.getFont().deriveFont(20f));
@@ -51,29 +44,24 @@ public class SetGui implements ActionListener {
         //add components
         frame.add(logoText);
         frame.add(gameTypeText);
-        frame.add(twoPlayerButton);
-        frame.add(threePlayerButton);
-        frame.add(fourPlayerButton);
-        frame.add(sixPlayerButton);
         frame.add(instructionButton);
         frame.add(exitButton);
+        frame.add(newGameButton);
+        frame.add(joinGameButton);
 
         //set component bounds
         logoText.setBounds(0, 0, 640, 55);
         gameTypeText.setBounds(60, 110, 165, 50);
-        twoPlayerButton.setBounds(80, 185, 130, 40);
-        threePlayerButton.setBounds(80, 245, 130, 40);
-        fourPlayerButton.setBounds(80, 300, 130, 40);
-        sixPlayerButton.setBounds(80, 355, 130, 40);
+
         instructionButton.setBounds(345, 185, 175, 55);
         exitButton.setBounds(420, 370, 100, 25);
+        newGameButton.setBounds(80,245,130,40);
+        joinGameButton.setBounds(80,300,130,40);
 
-        twoPlayerButton.addActionListener(this);
-        threePlayerButton.addActionListener(this);
-        fourPlayerButton.addActionListener(this);
-        sixPlayerButton.addActionListener(this);
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);
+        newGameButton.addActionListener(this);
+        joinGameButton.addActionListener(this);
 
         frame.setVisible(true);
     }
@@ -81,23 +69,7 @@ public class SetGui implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == twoPlayerButton) {
-            out.println("GAME_TYPE" + 2);
-            frame.dispose();
-            showWaitingRoom(2);
-        } else if (source == threePlayerButton) {
-            out.println("GAME_TYPE" + 3);
-            frame.dispose();
-            showWaitingRoom(3);
-        } else if (source == fourPlayerButton) {
-            out.println("GAME_TYPE" + 4);
-            frame.dispose();
-            showWaitingRoom(4);
-        } else if (source == sixPlayerButton) {
-            out.println("GAME_TYPE" + 6);
-            frame.dispose();
-            showWaitingRoom(6);
-        } else if (source == instructionButton) {
+         if (source == instructionButton) {
             JOptionPane.showMessageDialog(null,
                     "1. W jednej grze uczestniczy 2, 3, 4 lub 6 graczy. Kazdy gracz ma 10 pionów\n" +
                             "2. Gra toczy się na planszy w kształcie szesciopromiennej gwiazdy. Kazdy promień zawiera 10 pól, w których\n" +
@@ -112,36 +84,20 @@ public class SetGui implements ActionListener {
                             "Wówczas pion moze wykonywaę ruchy jedynie w obrębie tego promienia.\n" +
                             "6. Dopuszczalne jest pozostawianie swoich pionów w promieniu docelowym innego gracza (tzw. blokowanie).\n" +
                             "7. Gracz moze zrezygnować z ruchu w danej turze.", "How to play?", JOptionPane.INFORMATION_MESSAGE);
-        } else if (source == exitButton) {
+        } else if (source == exitButton)
+        {
             System.exit(0);
+        } else if (source == newGameButton)
+        {
+            out.println("NEW_GAME");
+            frame.dispose();
+            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out);
+        } else if (source == joinGameButton)
+        {
+             out.println("JOIN_GAME");
+             frame.dispose();
+             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out);
         }
     }
 
-    public void showWaitingRoom(int k) {
-        String tempText;
-
-        JFrame waitingRoomFrame = new JFrame();
-        ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
-        playerLabels.add(new JLabel ("Player 1"));
-        playerLabels.get(0).setBackground(Color.green);
-        playerLabels.get(0).setOpaque(true);
-
-        waitingRoomFrame.setSize(865, 480);
-        waitingRoomFrame.setLocation(250,50);
-        waitingRoomFrame.setResizable(false);
-        waitingRoomFrame.setLayout (null);
-
-        for(int i=1;i<=k;i++) {
-            tempText = "Waiting for Player " + i + "...";
-            if(i>1) {
-                playerLabels.add(new JLabel(tempText));
-                playerLabels.get(i - 1).setBackground(Color.red);
-            }
-            playerLabels.get(i-1).setBounds (20, 25+(60*(i-1)), 185, 50);
-            playerLabels.get(i-1).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i-1));
-        }
-
-        waitingRoomFrame.setVisible(true);
-    }
 }

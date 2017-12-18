@@ -42,7 +42,7 @@ public class Player extends Thread {
         } catch (IOException e) {
             System.out.println("Player died: " + e);
         }
-        this.socket = socket;
+
     }
 
     public void currentOpponent() {
@@ -92,13 +92,42 @@ public class Player extends Thread {
                      */
                 } else if (command.startsWith("QUIT")) {
                     return;
-                } else if (command.startsWith("GAME_TYPE")) {
-                    this.gameType = Integer.parseInt(command.substring(9));
-                    /*
-                     * TODO: if room <type> is not full join this player
-                     *       if room is full send message
-                     */
-                } else if (command.startsWith("ADD_BOT")) {
+                } else if (command.startsWith("JOIN_GAME"))
+                {
+                    while(true)
+                    {
+                        if(command.startsWith("GAME_TYPE"))
+                        {
+                            this.gameType = Integer.parseInt(command.substring(9));
+                            break;
+                            /*
+                             * TODO: if room <type> is not full join this player
+                             *       search for free room in chosen gametype
+                             *       join to lobby
+                             *       if no room send message and create new game
+                             */
+
+                        }
+                        else if(command.startsWith("RETURN"))
+                        {
+                            break;
+                        }
+                    }
+                }else if (command.startsWith("NEW_GAME")) {
+                    while (true) {
+                        if (command.startsWith("GAME_TYPE")) {
+                            this.gameType = Integer.parseInt(command.substring(9));
+                            break;
+                            /*
+                             * TODO: create new game
+                             *
+                             */
+
+                        } else if (command.startsWith("RETURN")) {
+                            break;
+                        }
+                    }
+                }else if (command.startsWith("ADD_BOT")) {
                     /*
                      * TODO: add one bot to game
                      */

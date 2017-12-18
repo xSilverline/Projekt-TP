@@ -36,7 +36,7 @@ public class Client{
         out = new PrintWriter(socket.getOutputStream(), true);
 
         // Layout GUI
-        setGui = new SetGui(in,out);
+        setGui = new SetGui(out);
     }
 
     /**
