@@ -25,17 +25,11 @@ public class Client{
      * Constructs the client by connecting to a server, laying out the
      * GUI and registering GUI listeners.
      */
-    public Client(String host, String player) throws Exception
+    public Client() throws Exception
     {
         // Layout GUI
 
-        int PORT = 9090;
-        socket = new Socket(host, PORT);
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
-        out.println("CONNECT");
-        out.println(player);
+
         setGui = new SetGui(out,this);
     }
 
@@ -55,6 +49,13 @@ public class Client{
     public void play() throws Exception {
         String response;
         try {
+
+            int PORT = 9090;
+            socket = new Socket(hostName, PORT);
+            in = new BufferedReader(new InputStreamReader(
+                    socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+
             while (true) {
                 response = in.readLine();
                 if (response.startsWith("VALID_MOVE")) {
@@ -111,7 +112,7 @@ public class Client{
         while (true) {
             String serverAddress = hostName;
 
-            Client client = new Client(serverAddress,playerName);
+            Client client = new Client();
             client.play();
             if (!client.wantsToPlayAgain()) {
                 break;

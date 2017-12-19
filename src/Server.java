@@ -35,7 +35,7 @@ import java.util.HashSet;
         try {
             while(true) {
 
-                    players.add(new Player(listener.accept(), id));
+                    new Player(listener.accept(),id).start();
                     /*if(id!=0 && id!=4) {
                         for(int i=0;i<=id;i++){
                             if(players.get(i).gameType!=(id+1)) {

@@ -17,10 +17,10 @@ import java.net.Socket;
 
 public class Player extends Thread {
     private String playerName;
+    private int playerId;
     private Socket socket;
-    private BufferedReader input;
-    private PrintWriter output;
-    //Boolean isReady;
+    private BufferedReader in;
+    private PrintWriter out;
     int gameType=0;
 
     /**
@@ -30,18 +30,7 @@ public class Player extends Thread {
      */
     public Player(Socket socket, int playerId) {
         this.socket = socket;
-        int playerId1 = playerId;
-        try {
-            input = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + playerName);
-            output.println("MESSAGE Waiting for opponent to connect");
-
-        } catch (IOException e) {
-            System.out.println("Player died: " + e);
-        }
-
+        this.playerId=playerId;
     }
 
     public void currentOpponent() {
@@ -51,7 +40,7 @@ public class Player extends Thread {
     }
 
     public void otherPlayerMoved(int location, int playerID) {
-        output.println("OPPONENT_MOVED " + playerID + location);
+        out.println("OPPONENT_MOVED " + playerID + location);
         /*
          * TODO: If game has winner:
          *          output.println("DEFEAT");
@@ -63,23 +52,32 @@ public class Player extends Thread {
      */
     public void run() {
         try {
-            output.println("MESSAGE All players connected");
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
 
             while (true) {
-                String command = input.readLine();
+                out.println("SUBMITNAME");
+                playerName = in.readLine();
                 if (playerName == null) {
                     return;
                 }
-
-                if (command.startsWith("SUBMITNAME")) {
-                    playerName = command.substring(10);
-                    synchronized (Server.names) {
-                        if (!Server.names.contains(playerName)) {
-                            Server.names.add(playerName);
-                            break;
-                        }
+                synchronized (Server.names) {
+                    if (!Server.names.contains(playerName)) {
+                        Server.names.add(playerName);
+                        break;
                     }
-                } else if (command.startsWith("MOVE")) {
+                }
+            }
+
+            out.println("NAMEACCEPTED");
+
+
+
+
+            while (true) {
+                String command = in.readLine();
+
+                if (command.startsWith("MOVE")) {
                     int expectPosition = Integer.parseInt(command.substring(5));
                     /*
                      * TODO: - if move is legal
