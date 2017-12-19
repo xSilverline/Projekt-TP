@@ -16,11 +16,10 @@ import java.net.Socket;
 
 
 public class Player extends Thread {
-    String playerName;
-    int playerId;
-    Socket socket;
-    BufferedReader input;
-    PrintWriter output;
+    private String playerName;
+    private Socket socket;
+    private BufferedReader input;
+    private PrintWriter output;
     //Boolean isReady;
     int gameType=0;
 
@@ -31,7 +30,7 @@ public class Player extends Thread {
      */
     public Player(Socket socket, int playerId) {
         this.socket = socket;
-        this.playerId = playerId;
+        int playerId1 = playerId;
         try {
             input = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
@@ -117,6 +116,7 @@ public class Player extends Thread {
                     while (true) {
                         if (command.startsWith("GAME_TYPE")) {
                             this.gameType = Integer.parseInt(command.substring(9));
+
                             break;
                             /*
                              * TODO: create new game

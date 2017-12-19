@@ -14,29 +14,29 @@ import java.util.ArrayList;
 
 public class Client{
 
-    SetGui setGui;
-    static String hostName = "localhost";
-    static String playerName = "Player";
+    private SetGui setGui;
 
-    private static int PORT = 9090;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-
+    static String playerName;
+    static String hostName;
     /**
      * Constructs the client by connecting to a server, laying out the
      * GUI and registering GUI listeners.
      */
-    public Client(String serverAddress) throws Exception {
+    public Client(String host, String player) throws Exception
+    {
+        // Layout GUI
 
-        // Setup networking
-        socket = new Socket(serverAddress, PORT);
+        int PORT = 9090;
+        socket = new Socket(host, PORT);
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-
-        // Layout GUI
-        setGui = new SetGui(out);
+        out.println("CONNECT");
+        out.println(player);
+        setGui = new SetGui(out,this);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Client{
         }
     }
 
-    private boolean wantsToPlayAgain() {
+    protected boolean wantsToPlayAgain() {
         int response = JOptionPane.showConfirmDialog(setGui.frame,
                 "Want to play again?",
                 "Chinese checkers ",
@@ -103,16 +103,21 @@ public class Client{
     /**
      * Runs the client as an application.
      */
-    public static void main(String[] args) throws Exception {
-        SetupWindow setupDialog = new SetupWindow();
+    public static void main(String[] args) throws Exception
+    {
+        SetupWindow setupWindow = new SetupWindow();
+
 
         while (true) {
             String serverAddress = hostName;
-            Client client = new Client(serverAddress);
+
+            Client client = new Client(serverAddress,playerName);
             client.play();
             if (!client.wantsToPlayAgain()) {
                 break;
             }
         }
+
+
     }
 }

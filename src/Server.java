@@ -22,7 +22,7 @@ import java.util.HashSet;
      * Runs the server.
      */
     static HashSet<String> names = new HashSet<String>();
-    //static ArrayList<PlayerStatus> playerInfo = new ArrayList<PlayerStatus>();
+    //static ArrayList<PlayerStatus> playerList = new ArrayList<PlayerStatus>();
     static ArrayList<Player> players = new ArrayList<Player>();
 
     public static void main(String[] args) throws Exception {
@@ -34,9 +34,9 @@ import java.util.HashSet;
 
         try {
             while(true) {
-                if(id<6) {
+
                     players.add(new Player(listener.accept(), id));
-                    if(id!=0 && id!=4) {
+                    /*if(id!=0 && id!=4) {
                         for(int i=0;i<=id;i++){
                             if(players.get(i).gameType!=(id+1)) {
                                 break;
@@ -45,11 +45,11 @@ import java.util.HashSet;
                                 Game game = new Game(id+1);
                             }
                         }
-                    }
+                    }*/
                     id++;
-                }else {
+                /*else {
                     System.out.println("No room");
-                }
+                }*/
             }
         } finally {
             listener.close();

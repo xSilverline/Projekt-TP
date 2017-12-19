@@ -15,8 +15,11 @@ public class ChooseGameFrame implements ActionListener {
 
     private PrintWriter out;
 
-    ChooseGameFrame(PrintWriter out)
+    private Client client;
+
+    ChooseGameFrame(PrintWriter out,Client client)
     {
+        this.client=client;
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
         chooseText.setFont(chooseText.getFont().deriveFont(20f));
         this.out=out;
@@ -79,7 +82,7 @@ public class ChooseGameFrame implements ActionListener {
         {
             out.println("RETURN");
             chooseGameFrame.dispose();
-            SetGui setGui = new SetGui(out);
+            SetGui setGui = new SetGui(out, client);
         }
     }
 }

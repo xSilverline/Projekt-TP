@@ -3,12 +3,12 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class SetGui implements ActionListener {
     JFrame frame = new JFrame();
     JLabel messageLabel = new JLabel("");
+    private Client client;
 
     private JButton instructionButton;
     private JButton exitButton;
@@ -17,20 +17,23 @@ public class SetGui implements ActionListener {
 
     private PrintWriter out;
 
-    SetGui(PrintWriter out)
+    SetGui(PrintWriter out, Client client)
     {
         this.out=out;
-
+        this.client=client;
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle(messageLabel.getText());
 
         //construct components
+
+
         JLabel logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);
         JLabel gameTypeText = new JLabel("Play multiplayer:", SwingConstants.CENTER);
         instructionButton = new JButton("How to play?");
         exitButton = new JButton("Exit");
         newGameButton = new JButton("New Game");
         joinGameButton = new JButton("Join Game");
+
 
         logoText.setFont(logoText.getFont().deriveFont(54f));
         gameTypeText.setFont(gameTypeText.getFont().deriveFont(20f));
@@ -49,19 +52,21 @@ public class SetGui implements ActionListener {
         frame.add(newGameButton);
         frame.add(joinGameButton);
 
+
         //set component bounds
         logoText.setBounds(0, 0, 640, 55);
         gameTypeText.setBounds(60, 110, 165, 50);
 
-        instructionButton.setBounds(345, 185, 175, 55);
-        exitButton.setBounds(420, 370, 100, 25);
-        newGameButton.setBounds(80,245,130,40);
-        joinGameButton.setBounds(80,300,130,40);
+        instructionButton.setBounds(80, 300, 130, 40);
+        exitButton.setBounds(450,400,130,30);
+        newGameButton.setBounds(80,175,130,40);
+        joinGameButton.setBounds(80,230,130,40);
 
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);
         newGameButton.addActionListener(this);
         joinGameButton.addActionListener(this);
+
 
         frame.setVisible(true);
     }
@@ -91,12 +96,12 @@ public class SetGui implements ActionListener {
         {
             out.println("NEW_GAME");
             frame.dispose();
-            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out);
+            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         } else if (source == joinGameButton)
         {
              out.println("JOIN_GAME");
              frame.dispose();
-             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out);
+             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         }
     }
 
