@@ -67,8 +67,12 @@ public class Player extends Thread {
                     if (!Server.names.contains(playerName))
                     {
                         Server.names.add(playerName);
-
                         break;
+                    }
+                    else
+                    {
+                        out.println("INVALID_NAME");
+
                     }
                 }
             }

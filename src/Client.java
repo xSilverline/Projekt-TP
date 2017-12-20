@@ -45,7 +45,7 @@ public class Client{
      * message is recevied then the loop will exit and the server
      * will be sent a "QUIT" message also.
      */
-    public void play() throws Exception {
+    private void play() throws Exception {
         String response;
         try {
 
@@ -54,7 +54,7 @@ public class Client{
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            response = in.readLine();
+
             setGui.setOut(out);
 
             while (true)
@@ -63,17 +63,17 @@ public class Client{
                 if (response.startsWith("SUBMITNAME")) {
                     out.println(playerName);
                 } else if (response.startsWith("INVALID_NAME")) {
-                    JOptionPane.showMessageDialog(setGui.frame, "Name already taken\nchoose another one");
+                    JOptionPane.showMessageDialog(null, "Name already taken\nchoose another one");
+                    SetupWindow setupWindow = new SetupWindow();
                 } else if (response.startsWith("NAMEACCEPTED")) {
                     connected = true;
-                    JOptionPane.showMessageDialog(setGui.frame, "CONNECTED");
+                    JOptionPane.showMessageDialog(null, "CONNECTED");
                     break;
                 }
             }
 
             while (true)
             {
-
                 if (response.startsWith("VALID_MOVE")) {
                     setGui.messageLabel.setText("Valid move, wait for next turn.");
                 } else if (response.startsWith("OPPONENT_MOVED")) {
@@ -108,8 +108,8 @@ public class Client{
         }
     }
 
-    protected boolean wantsToPlayAgain() {
-        int response = JOptionPane.showConfirmDialog(setGui.frame,
+    private boolean wantsToPlayAgain() {
+        int response = JOptionPane.showConfirmDialog(null,
                 "Want to play again?",
                 "Chinese checkers ",
                 JOptionPane.YES_NO_OPTION);
@@ -126,8 +126,6 @@ public class Client{
 
 
         while (true) {
-            String serverAddress = hostName;
-
             Client client = new Client();
             client.play();
             if (!client.wantsToPlayAgain()) {
