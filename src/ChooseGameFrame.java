@@ -65,19 +65,19 @@ public class ChooseGameFrame implements ActionListener {
         if (source == twoPlayerButton) {
             out.println("GAME_TYPE" + 2);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2,out,client);
         } else if (source == threePlayerButton) {
             out.println("GAME_TYPE" + 3);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3,out,client);
         } else if (source == fourPlayerButton) {
             out.println("GAME_TYPE" + 4);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4,out,client);
         } else if (source == sixPlayerButton) {
             out.println("GAME_TYPE" + 6);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6,out,client);
         } else if (source == returnButton)
         {
             out.println("RETURN");

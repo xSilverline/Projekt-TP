@@ -1,14 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class WaitingRoomFrame
+public class WaitingRoomFrame  implements ActionListener
 {
-    WaitingRoomFrame(int k)
+    private JButton returnButton;
+    private JFrame waitingRoomFrame;
+    private PrintWriter out;
+    private Client client;
+    WaitingRoomFrame(int k, PrintWriter out, Client client)
     {
         String tempText;
+        this.out=out;
+        this.client=client;
 
-        JFrame waitingRoomFrame = new JFrame();
+        waitingRoomFrame = new JFrame();
         ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
         playerLabels.add(new JLabel ("Player 1"));
         playerLabels.get(0).setBackground(Color.green);
@@ -18,7 +27,11 @@ public class WaitingRoomFrame
         waitingRoomFrame.setLocation(250,50);
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
+        returnButton = new JButton("Return");
+        waitingRoomFrame.add(returnButton);
+        returnButton.setBounds(600,400,60,30);
 
+        returnButton.addActionListener(this);
 
 
         for(int i=1;i<=k;i++) {
@@ -33,5 +46,15 @@ public class WaitingRoomFrame
         }
 
         waitingRoomFrame.setVisible(true);
+    }
+    public void actionPerformed(ActionEvent e)
+    {
+        Object source = e.getSource();
+
+        if(source==returnButton)
+        {
+            waitingRoomFrame.dispose();
+            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
+        }
     }
 }

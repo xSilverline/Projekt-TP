@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
 public class Player extends Thread {
@@ -101,6 +102,26 @@ public class Player extends Thread {
                         if(command.startsWith("GAME_TYPE"))
                         {
                             this.gameType = Integer.parseInt(command.substring(9));
+                            boolean found = false;
+                            for(Lobby x: Server.lobbyList)
+                            {
+                                if(x.getGameType()==gameType)
+                                {
+                                    if(x.isFree())
+                                    {
+                                        x.joinLobby(this);
+                                        found= true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!found)
+                            {
+                                Lobby lobby = new Lobby(gameType);
+                                lobby.joinLobby(this);
+                                Server.lobbyList.add(lobby);
+                            }
+
                             break;
                             /*
                              * TODO: if room <type> is not full join this player
@@ -119,7 +140,9 @@ public class Player extends Thread {
                     while (true) {
                         if (command.startsWith("GAME_TYPE")) {
                             this.gameType = Integer.parseInt(command.substring(9));
-
+                            Lobby lobby = new Lobby(gameType);
+                            lobby.joinLobby(this);
+                            Server.lobbyList.add(lobby);
                             break;
                             /*
                              * TODO: create new game

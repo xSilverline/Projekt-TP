@@ -24,6 +24,7 @@ import java.util.HashSet;
     static HashSet<String> names = new HashSet<String>();
     //static ArrayList<PlayerStatus> playerList = new ArrayList<PlayerStatus>();
     static ArrayList<Player> players = new ArrayList<Player>();
+    static ArrayList<Lobby> lobbyList = new ArrayList<Lobby>();
 
     public static void main(String[] args) throws Exception {
 
