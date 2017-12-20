@@ -14,10 +14,13 @@ public class SetGui implements ActionListener {
     private JButton exitButton;
     private JButton newGameButton;
     private JButton joinGameButton;
+   // private JButton connectButton;
+   // private JTextField hostName;
+   // private JTextField playerName;
 
     private PrintWriter out;
 
-    SetGui(PrintWriter out, Client client)
+    SetGui( Client client, PrintWriter out)
     {
         this.out=out;
         this.client=client;
@@ -33,6 +36,10 @@ public class SetGui implements ActionListener {
         exitButton = new JButton("Exit");
         newGameButton = new JButton("New Game");
         joinGameButton = new JButton("Join Game");
+      //  connectButton = new JButton("Connect");
+
+     //   hostName = new JTextField("localhost");
+      //  playerName = new JTextField("player");
 
 
         logoText.setFont(logoText.getFont().deriveFont(54f));
@@ -51,6 +58,9 @@ public class SetGui implements ActionListener {
         frame.add(exitButton);
         frame.add(newGameButton);
         frame.add(joinGameButton);
+     //   frame.add(connectButton);
+     //   frame.add(hostName);
+     //   frame.add(playerName);
 
 
         //set component bounds
@@ -61,14 +71,22 @@ public class SetGui implements ActionListener {
         exitButton.setBounds(450,400,130,30);
         newGameButton.setBounds(80,175,130,40);
         joinGameButton.setBounds(80,230,130,40);
+      //  hostName.setBounds(400,175,150,30);
+      //  playerName.setBounds(400,230,150,30);
+      //  connectButton.setBounds(425,275,100,40);
 
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);
         newGameButton.addActionListener(this);
         joinGameButton.addActionListener(this);
+       // connectButton.addActionListener(this);
 
 
         frame.setVisible(true);
+    }
+    public void setOut(PrintWriter out)
+    {
+        this.out=out;
     }
 
 
@@ -103,6 +121,7 @@ public class SetGui implements ActionListener {
              frame.dispose();
              ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         }
+
     }
 
 }

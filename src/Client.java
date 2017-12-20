@@ -29,7 +29,7 @@ public class Client{
     public Client() throws Exception
     {
         // Layout GUI
-        setGui = new SetGui(out,this);
+        setGui = new SetGui(this,out);
     }
 
     /**
@@ -54,20 +54,25 @@ public class Client{
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            response = in.readLine();
+            setGui.setOut(out);
 
-            while (true) {
+            while (true)
+            {
                 response = in.readLine();
-                if (response.startsWith("SUBMITNAME"))
-                {
+                if (response.startsWith("SUBMITNAME")) {
                     out.println(playerName);
-                }else if(response.startsWith("INVALID_NAME"))
-                {
-                        JOptionPane.showMessageDialog(setGui.frame,"Name already taken\nchoose another one");
-                }else if(response.startsWith("NAMEACCEPTED"))
-                {
-                    connected=true;
-                    JOptionPane.showMessageDialog(setGui.frame,"CONNECTED");
+                } else if (response.startsWith("INVALID_NAME")) {
+                    JOptionPane.showMessageDialog(setGui.frame, "Name already taken\nchoose another one");
+                } else if (response.startsWith("NAMEACCEPTED")) {
+                    connected = true;
+                    JOptionPane.showMessageDialog(setGui.frame, "CONNECTED");
+                    break;
                 }
+            }
+
+            while (true)
+            {
 
                 if (response.startsWith("VALID_MOVE")) {
                     setGui.messageLabel.setText("Valid move, wait for next turn.");
@@ -117,7 +122,7 @@ public class Client{
      */
     public static void main(String[] args) throws Exception
     {
-        SetupWindow setupWindow = new SetupWindow();
+       SetupWindow setupWindow = new SetupWindow();
 
 
         while (true) {

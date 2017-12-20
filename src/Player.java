@@ -50,12 +50,14 @@ public class Player extends Thread {
     /**
      * The run method of this thread.
      */
-    public void run() {
+    public void run()
+    {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            while (true) {
+            while (true)
+            {
                 out.println("SUBMITNAME");
                 playerName = in.readLine();
                 if (playerName == null) {
@@ -65,20 +67,13 @@ public class Player extends Thread {
                     if (!Server.names.contains(playerName))
                     {
                         Server.names.add(playerName);
-                        break;
-                    }else
-                    {
-                        out.println("INVALID_NAME");
+
                         break;
                     }
                 }
             }
-
             out.println("NAMEACCEPTED");
             Server.players.add(this);
-
-
-
 
             while (true) {
                 String command = in.readLine();

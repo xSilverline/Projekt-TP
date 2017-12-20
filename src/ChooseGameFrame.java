@@ -82,7 +82,7 @@ public class ChooseGameFrame implements ActionListener {
         {
             out.println("RETURN");
             chooseGameFrame.dispose();
-            SetGui setGui = new SetGui(out, client);
+            SetGui setGui = new SetGui(client,out);
         }
     }
 }

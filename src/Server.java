@@ -21,7 +21,7 @@ import java.util.HashSet;
     /**
      * Runs the server.
      */
-    static HashSet<String> names = new HashSet<String>();
+    static final HashSet<String> names = new HashSet<String>();
     //static ArrayList<PlayerStatus> playerList = new ArrayList<PlayerStatus>();
     static ArrayList<Player> players = new ArrayList<Player>();
 
@@ -36,6 +36,7 @@ import java.util.HashSet;
             while(true) {
 
                     new Player(listener.accept(),id).start();
+
                     /*if(id!=0 && id!=4) {
                         for(int i=0;i<=id;i++){
                             if(players.get(i).gameType!=(id+1)) {
