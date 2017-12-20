@@ -8,7 +8,8 @@ import java.awt.event.WindowEvent;
 
 public class SetupWindow extends JDialog
 {
-    boolean blockade=true;
+    private JTextField hostField;
+    private JTextField playerField;
     SetupWindow()
     {
         setModal(true);
@@ -19,16 +20,19 @@ public class SetupWindow extends JDialog
         setSize(400,200);
         setLocation(400,300);
         JButton acceptButton = new JButton ("CONNECT");
-        final JTextField hostField = new JTextField("localhost", 30);
-        final JTextField playerField = new JTextField("Player", 30);
+
+        hostField = new JTextField("", 30);
+
+        playerField = new JTextField("", 30);
+        hostField.setText("localhost");
+        playerField.setText("player");
+
         acceptButton.addActionListener ( new ActionListener()
         {
-            public void actionPerformed( ActionEvent e )
-            {
+            public void actionPerformed( ActionEvent e ) {
                 dispose();
-                Client.playerName=playerField.getText();
-                Client.hostName=hostField.getText();
-                blockade=false;
+                Client.playerName = playerField.getText();
+                Client.hostName = hostField.getText();
             }
         });
 

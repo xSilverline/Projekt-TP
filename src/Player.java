@@ -62,14 +62,20 @@ public class Player extends Thread {
                     return;
                 }
                 synchronized (Server.names) {
-                    if (!Server.names.contains(playerName)) {
+                    if (!Server.names.contains(playerName))
+                    {
                         Server.names.add(playerName);
+                        break;
+                    }else
+                    {
+                        out.println("INVALID_NAME");
                         break;
                     }
                 }
             }
 
             out.println("NAMEACCEPTED");
+            Server.players.add(this);
 
 
 

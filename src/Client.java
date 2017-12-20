@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Client{
 
     private SetGui setGui;
+    private boolean connected=false;
 
     private Socket socket;
     private BufferedReader in;
@@ -28,8 +29,6 @@ public class Client{
     public Client() throws Exception
     {
         // Layout GUI
-
-
         setGui = new SetGui(out,this);
     }
 
@@ -58,6 +57,18 @@ public class Client{
 
             while (true) {
                 response = in.readLine();
+                if (response.startsWith("SUBMITNAME"))
+                {
+                    out.println(playerName);
+                }else if(response.startsWith("INVALID_NAME"))
+                {
+                        JOptionPane.showMessageDialog(setGui.frame,"Name already taken\nchoose another one");
+                }else if(response.startsWith("NAMEACCEPTED"))
+                {
+                    connected=true;
+                    JOptionPane.showMessageDialog(setGui.frame,"CONNECTED");
+                }
+
                 if (response.startsWith("VALID_MOVE")) {
                     setGui.messageLabel.setText("Valid move, wait for next turn.");
                 } else if (response.startsWith("OPPONENT_MOVED")) {
