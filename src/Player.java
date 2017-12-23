@@ -8,15 +8,13 @@
  */
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
 
 public class Player extends Thread {
+
     private String playerName;
     private int playerId;
     private Socket socket;
@@ -56,6 +54,7 @@ public class Player extends Thread {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+
 
             while (true)
             {
@@ -99,30 +98,22 @@ public class Player extends Thread {
                 {
                     while(true)
                     {
-                        if(command.startsWith("GAME_TYPE"))
+                        if (command.startsWith("GET_LOBBY"))
                         {
-                            this.gameType = Integer.parseInt(command.substring(9));
-                            boolean found = false;
-                            for(Lobby x: Server.lobbyList)
+                            for (Lobby l: Server.lobbyList)
                             {
-                                if(x.getGameType()==gameType)
-                                {
-                                    if(x.isFree())
-                                    {
-                                        x.joinLobby(this);
-                                        found= true;
-                                        break;
-                                    }
-                                }
+                                out.println("Room "+l.getId()+"  Type: " + l.getGameType() + "  Number of players: "+l.getNumberOfPlayers() );
                             }
-                            if(!found)
-                            {
-                                Lobby lobby = new Lobby(gameType);
-                                lobby.joinLobby(this);
-                                Server.lobbyList.add(lobby);
-                            }
-
+                            out.println("EOL");
                             break;
+                        }
+                        else if (command.startsWith("RETURN"))
+                        {
+                            break;
+                        }
+
+                    }
+
                             /*
                              * TODO: if room <type> is not full join this player
                              *       search for free room in chosen gametype
@@ -130,18 +121,14 @@ public class Player extends Thread {
                              *       if no room send message and create new game
                              */
 
-                        }
-                        else if(command.startsWith("RETURN"))
-                        {
-                            break;
-                        }
-                    }
                 }else if (command.startsWith("NEW_GAME")) {
                     while (true) {
                         if (command.startsWith("GAME_TYPE")) {
                             this.gameType = Integer.parseInt(command.substring(9));
-                            Lobby lobby = new Lobby(gameType);
+                            int id=Server.lobbyList.get(Server.lobbyList.size()-1).getId() + 1;
+                            Lobby lobby = new Lobby(gameType,id);
                             lobby.joinLobby(this);
+
                             Server.lobbyList.add(lobby);
                             break;
                             /*

@@ -4,11 +4,12 @@ public class Lobby
 {
     private int gameType;
     ArrayList<Player> players= new ArrayList();
+    private int id;
 
-    Lobby(int gameType)
+    Lobby(int gameType,int id)
     {
         this.gameType=gameType;
-
+        this.id=id;
     }
 
     public boolean isFree()
@@ -19,6 +20,10 @@ public class Lobby
         }
         else
             return false;
+    }
+    public int getId()
+    {
+        return id;
     }
 
     public int getGameType() {
@@ -36,6 +41,11 @@ public class Lobby
     public void leaveLobby(Player player)
     {
         players.remove(player);
+    }
+
+    public int getNumberOfPlayers()
+    {
+        return players.size();
     }
 
 

@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -9,11 +11,15 @@ public class WaitingRoomFrame  implements ActionListener
 {
     private JButton returnButton;
     private JFrame waitingRoomFrame;
+    private BufferedReader in;
+
     private PrintWriter out;
     private Client client;
-    WaitingRoomFrame(int k, PrintWriter out, Client client)
+    WaitingRoomFrame(int k, BufferedReader in,PrintWriter out, Client client)
     {
         String tempText;
+
+        this.in = in;
         this.out=out;
         this.client=client;
 
@@ -54,7 +60,7 @@ public class WaitingRoomFrame  implements ActionListener
         if(source==returnButton)
         {
             waitingRoomFrame.dispose();
-            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
+            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
         }
     }
 }

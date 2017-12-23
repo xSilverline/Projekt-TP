@@ -3,6 +3,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 
 public class SetGui implements ActionListener {
@@ -14,16 +16,17 @@ public class SetGui implements ActionListener {
     private JButton exitButton;
     private JButton newGameButton;
     private JButton joinGameButton;
-   // private JButton connectButton;
-   // private JTextField hostName;
-   // private JTextField playerName;
 
     private PrintWriter out;
+    private BufferedReader in;
 
-    SetGui( Client client, PrintWriter out)
+
+    SetGui(Client client, PrintWriter out, BufferedReader in)
     {
         this.out=out;
+
         this.client=client;
+        this.in = in;
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle(messageLabel.getText());
 
@@ -36,17 +39,12 @@ public class SetGui implements ActionListener {
         exitButton = new JButton("Exit");
         newGameButton = new JButton("New Game");
         joinGameButton = new JButton("Join Game");
-      //  connectButton = new JButton("Connect");
-
-     //   hostName = new JTextField("localhost");
-      //  playerName = new JTextField("player");
-
 
         logoText.setFont(logoText.getFont().deriveFont(54f));
         gameTypeText.setFont(gameTypeText.getFont().deriveFont(20f));
 
         //adjust size and set layout
-        frame.setSize(640, 480);
+        frame.setSize(800, 600);
         frame.setResizable(false);
         frame.setLocation(250,50);
         frame.setLayout(null);
@@ -58,10 +56,6 @@ public class SetGui implements ActionListener {
         frame.add(exitButton);
         frame.add(newGameButton);
         frame.add(joinGameButton);
-     //   frame.add(connectButton);
-     //   frame.add(hostName);
-     //   frame.add(playerName);
-
 
         //set component bounds
         logoText.setBounds(0, 0, 640, 55);
@@ -71,22 +65,19 @@ public class SetGui implements ActionListener {
         exitButton.setBounds(450,400,130,30);
         newGameButton.setBounds(80,175,130,40);
         joinGameButton.setBounds(80,230,130,40);
-      //  hostName.setBounds(400,175,150,30);
-      //  playerName.setBounds(400,230,150,30);
-      //  connectButton.setBounds(425,275,100,40);
 
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);
         newGameButton.addActionListener(this);
         joinGameButton.addActionListener(this);
-       // connectButton.addActionListener(this);
-
 
         frame.setVisible(true);
     }
-    public void setOut(PrintWriter out)
+    public void setConn(PrintWriter out,BufferedReader in)
     {
         this.out=out;
+        this.in=in;
+
     }
 
 
@@ -114,12 +105,13 @@ public class SetGui implements ActionListener {
         {
             out.println("NEW_GAME");
             frame.dispose();
-            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
+            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
         } else if (source == joinGameButton)
         {
              out.println("JOIN_GAME");
              frame.dispose();
-             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
+             ChooseLobby chooseLobby = new ChooseLobby(in,out,client);
+             //ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         }
 
     }

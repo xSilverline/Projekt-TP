@@ -3,6 +3,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 
 public class ChooseGameFrame implements ActionListener {
@@ -14,12 +16,15 @@ public class ChooseGameFrame implements ActionListener {
     private JFrame chooseGameFrame = new JFrame();
 
     private PrintWriter out;
+    private BufferedReader in;
 
     private Client client;
 
-    ChooseGameFrame(PrintWriter out,Client client)
+    ChooseGameFrame(BufferedReader in,PrintWriter out, Client client)
     {
         this.client=client;
+        this.in = in;
+
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
         chooseText.setFont(chooseText.getFont().deriveFont(20f));
         this.out=out;
@@ -65,24 +70,24 @@ public class ChooseGameFrame implements ActionListener {
         if (source == twoPlayerButton) {
             out.println("GAME_TYPE" + 2);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2,out,client);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2,in,out,client);
         } else if (source == threePlayerButton) {
             out.println("GAME_TYPE" + 3);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3,out,client);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3,in,out,client);
         } else if (source == fourPlayerButton) {
             out.println("GAME_TYPE" + 4);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4,out,client);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4,in,out,client);
         } else if (source == sixPlayerButton) {
             out.println("GAME_TYPE" + 6);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6,out,client);
+            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6,in,out,client);
         } else if (source == returnButton)
         {
             out.println("RETURN");
             chooseGameFrame.dispose();
-            SetGui setGui = new SetGui(client,out);
+            SetGui setGui = new SetGui(client,out,in);
         }
     }
 }
