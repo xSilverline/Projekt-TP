@@ -64,12 +64,15 @@ public class ChooseLobby implements ActionListener
                 String tempList = in.readLine();
                 if(tempList == "EOL")
                 {
+                    if(list.isEmpty())
+                    {
+                        list.addElement("No games");
+                    }
                     break;
                 }
                 else
                 {
                     list.addElement(tempList);
-
                 }
             }
             catch (IOException e) {
