@@ -47,6 +47,24 @@ public class Player extends Thread {
          */
     }
 
+    void checkLobby()
+    {
+        Lobby toRemove=null;
+        for(Lobby l: Server.lobbyList)
+        {
+            if(l.getId() == lobbyId)
+            {
+                l.players.remove(this);
+                toRemove = l;
+                break;
+            }
+        }
+        if(toRemove != null)
+        {
+            Server.lobbyList.remove(toRemove);
+        }
+    }
+
     /**
      * The run method of this thread.
      */
@@ -117,34 +135,35 @@ public class Player extends Thread {
 
 
                 }
-                else if(command.startsWith("PLAYER_EXIT"))
-                {
-                    Server.players.remove(this);
-                    Server.names.remove(playerName);
-                }
                 else if(command.startsWith("RETURN_FROM_LOBBY"))
                 {
-                    for(Lobby l: Server.lobbyList)
-                    {
-                        if(l.getId() == lobbyId)
-                        {
-                            l.players.remove(this);
-                        }
-                    }
+                    checkLobby();
                 }
                 else if(command.startsWith("GET_LOBBY_ID"))
                 {
                     out.println(lobbyId);
                 }
-                else if (command.startsWith("NEW_GAME_TYPE")) {
+                else if (command.startsWith("NEW_GAME_TYPE"))
+                {
+                    int id;
 
-                    this.gameType = Integer.parseInt(command.substring(13));
-                    int id=Server.lobbyList.get(Server.lobbyList.size()-1).getId() + 1;
-                    Lobby lobby = new Lobby(gameType,id);
-                    lobby.joinLobby(this);
-                    lobbyId = id;
+                    gameType = Integer.parseInt(command.substring(13));
+                    System.out.println(gameType);
+                    if(!Server.lobbyList.isEmpty())
+                    {
+                        id = Server.lobbyList.get(Server.lobbyList.size() - 1).getId() + 1;
+                    }
+                    else
+                        {
+                        id = 1;
+                    }
+                        Lobby lobby = new Lobby(gameType, id);
+                        lobby.joinLobby(this);
+                        lobbyId = id;
+                        System.out.println(id);
 
-                    Server.lobbyList.add(lobby);
+                        Server.lobbyList.add(lobby);
+
 
                             /*
                              * TODO: create new game
@@ -165,6 +184,7 @@ public class Player extends Thread {
         } catch (IOException e)
         {
             System.out.println("Player disconnected: " + e);
+            checkLobby();
             Server.names.remove(playerName);
             Server.players.remove(this);
         } finally {

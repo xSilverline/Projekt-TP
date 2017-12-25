@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -30,12 +31,15 @@ public class ChooseLobby implements ActionListener
         this.client=client;
         this.out=out;
 
-        chooseLobbyFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        chooseLobbyFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        chooseLobbyFrame.setUndecorated(true);
 
-        chooseLobbyFrame.setSize(800, 600);
+        chooseLobbyFrame.setSize(1366, 768);
         chooseLobbyFrame.setResizable(false);
-        chooseLobbyFrame.setLocation(250,50);
+        //chooseLobbyFrame.setLocation(250,50);
         chooseLobbyFrame.setLayout(null);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        chooseLobbyFrame.setLocation(dim.width/2-chooseLobbyFrame.getSize().width/2, dim.height/2-chooseLobbyFrame.getSize().height/2);
 
         joinButton = new JButton("Join");
         returnButton = new JButton("Return");
@@ -106,7 +110,7 @@ public class ChooseLobby implements ActionListener
         }
         else if (source == joinButton)
          {
-
+            String selectedLobby = list.getElementAt(lobbyList.getSelectedIndex());
             // WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame()
          }
          else if (source == refreshButton)

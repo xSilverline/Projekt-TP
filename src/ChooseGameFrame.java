@@ -1,6 +1,7 @@
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -28,12 +29,15 @@ public class ChooseGameFrame implements ActionListener {
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
         chooseText.setFont(chooseText.getFont().deriveFont(20f));
         this.out=out;
-        chooseGameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        chooseGameFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        chooseGameFrame.setUndecorated(true);
 
-        chooseGameFrame.setSize(640, 480);
+        chooseGameFrame.setSize(1366, 768);
         chooseGameFrame.setResizable(false);
-        chooseGameFrame.setLocation(250,50);
+        //chooseGameFrame.setLocation(250,50);
         chooseGameFrame.setLayout(null);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        chooseGameFrame.setLocation(dim.width/2-chooseGameFrame.getSize().width/2, dim.height/2-chooseGameFrame.getSize().height/2);
 
         twoPlayerButton = new JButton("2 Players");
         threePlayerButton = new JButton("3 Players");
@@ -68,19 +72,19 @@ public class ChooseGameFrame implements ActionListener {
     {
         Object source = e.getSource();
         if (source == twoPlayerButton) {
-            out.println("GAME_TYPE" + 2);
+            out.println("NEW_GAME_TYPE" + 2);
             chooseGameFrame.dispose();
             WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2,in,out,client);
         } else if (source == threePlayerButton) {
-            out.println("GAME_TYPE" + 3);
+            out.println("NEW_GAME_TYPE" + 3);
             chooseGameFrame.dispose();
             WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3,in,out,client);
         } else if (source == fourPlayerButton) {
-            out.println("GAME_TYPE" + 4);
+            out.println("NEW_GAME_TYPE" + 4);
             chooseGameFrame.dispose();
             WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4,in,out,client);
         } else if (source == sixPlayerButton) {
-            out.println("GAME_TYPE" + 6);
+            out.println("NEW_GAME_TYPE" + 6);
             chooseGameFrame.dispose();
             WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6,in,out,client);
         } else if (source == returnButton)

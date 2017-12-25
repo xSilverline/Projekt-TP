@@ -1,70 +1,76 @@
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 
 public class SetGui implements ActionListener {
+
     JFrame frame = new JFrame();
     JLabel messageLabel = new JLabel("");
     private Client client;
-
     private JButton instructionButton;
     private JButton exitButton;
     private JButton newGameButton;
     private JButton joinGameButton;
-
     private PrintWriter out;
     private BufferedReader in;
+
 
 
     SetGui(Client client, PrintWriter out, BufferedReader in)
     {
         this.out=out;
-
         this.client=client;
         this.in = in;
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setTitle(messageLabel.getText());
+        frame.setUndecorated(true);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         //construct components
 
-
         JLabel logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);
-        JLabel gameTypeText = new JLabel("Play multiplayer:", SwingConstants.CENTER);
+
+
         instructionButton = new JButton("How to play?");
         exitButton = new JButton("Exit");
         newGameButton = new JButton("New Game");
         joinGameButton = new JButton("Join Game");
 
-        logoText.setFont(logoText.getFont().deriveFont(54f));
-        gameTypeText.setFont(gameTypeText.getFont().deriveFont(20f));
+        logoText.setFont(logoText.getFont().deriveFont(60f));
+
 
         //adjust size and set layout
-        frame.setSize(800, 600);
+        frame.setSize(1366, 768);
         frame.setResizable(false);
-        frame.setLocation(250,50);
+        //frame.setLocation(250,50);
         frame.setLayout(null);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        //frame.setSize(dim.width/2,dim.height/2);
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+        //frame.getContentPane().setBackground(new Color(111, 45, 49));
+
 
         //add components
-        frame.add(logoText);
-        frame.add(gameTypeText);
+        frame.add(logoText);;
         frame.add(instructionButton);
         frame.add(exitButton);
         frame.add(newGameButton);
         frame.add(joinGameButton);
 
         //set component bounds
-        logoText.setBounds(0, 0, 640, 55);
-        gameTypeText.setBounds(60, 110, 165, 50);
+        logoText.setBounds(350, 50, 666, 55);
 
-        instructionButton.setBounds(80, 300, 130, 40);
-        exitButton.setBounds(450,400,130,30);
-        newGameButton.setBounds(80,175,130,40);
-        joinGameButton.setBounds(80,230,130,40);
+
+        instructionButton.setBounds(1200, 50, 150, 50);
+        exitButton.setBounds(1200,700,150,50);
+        newGameButton.setBounds(350,300,300,300);
+        joinGameButton.setBounds(716,300,300,300);
 
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);
@@ -73,13 +79,22 @@ public class SetGui implements ActionListener {
 
         frame.setVisible(true);
     }
-    public void setConn(PrintWriter out,BufferedReader in)
+
+    void setConn(PrintWriter out, BufferedReader in)
     {
         this.out=out;
         this.in=in;
-
     }
-
+    void setButtonsEnabled()
+    {
+        joinGameButton.setEnabled(true);
+        newGameButton.setEnabled(true);
+    }
+    void setButtonsDisabled()
+    {
+        joinGameButton.setEnabled(false);
+        newGameButton.setEnabled(false);
+    }
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -100,21 +115,15 @@ public class SetGui implements ActionListener {
                             "7. Gracz moze zrezygnować z ruchu w danej turze.", "How to play?", JOptionPane.INFORMATION_MESSAGE);
         } else if (source == exitButton)
         {
-            out.println("PLAYER_EXIT");
             System.exit(0);
         } else if (source == newGameButton)
         {
-
             frame.dispose();
-            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
+            new ChooseGameFrame(in,out,client);
         } else if (source == joinGameButton)
         {
-
              frame.dispose();
-             ChooseLobby chooseLobby = new ChooseLobby(in,out,client);
-             //ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
+             new ChooseLobby(in,out,client);
         }
-
     }
-
 }

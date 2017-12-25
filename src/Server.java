@@ -20,7 +20,6 @@ import java.util.HashSet;
      * Runs the server.
      */
     static HashSet<String> names = new HashSet<String>();
-    //static ArrayList<PlayerStatus> playerList = new ArrayList<PlayerStatus>();
     static ArrayList<Player> players = new ArrayList<Player>();
     static ArrayList<Lobby> lobbyList = new ArrayList<Lobby>();
 

@@ -56,6 +56,8 @@ public class Client{
 
 
             setGui.setConn(out,in);
+            setGui.setButtonsDisabled();
+
 
             while (true)
             {
@@ -68,6 +70,8 @@ public class Client{
                 } else if (response.startsWith("NAMEACCEPTED")) {
                     connected = true;
                     JOptionPane.showMessageDialog(null, "CONNECTED");
+                    setGui.setButtonsEnabled();
+
                     break;
                 }
             }

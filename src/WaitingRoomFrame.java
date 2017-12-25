@@ -19,12 +19,13 @@ public class WaitingRoomFrame  implements ActionListener
     private Client client;
     WaitingRoomFrame(int k, BufferedReader in,PrintWriter out, Client client)
     {
+        /*
         out.println("GET_LOBBY_ID");
         try {
             lobbyId= Integer.parseInt(in.readLine());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         String tempText;
 
 
@@ -33,13 +34,17 @@ public class WaitingRoomFrame  implements ActionListener
         this.client=client;
 
         waitingRoomFrame = new JFrame();
+        waitingRoomFrame.setUndecorated(true);
         ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
         playerLabels.add(new JLabel ("Player 1"));
         playerLabels.get(0).setBackground(Color.green);
         playerLabels.get(0).setOpaque(true);
 
-        waitingRoomFrame.setSize(800, 600);
+        waitingRoomFrame.setSize(1366, 768);
         waitingRoomFrame.setLocation(250,50);
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        waitingRoomFrame.setLocation(dim.width/2-waitingRoomFrame.getSize().width/2, dim.height/2-waitingRoomFrame.getSize().height/2);
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
         returnButton = new JButton("Return");

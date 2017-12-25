@@ -26,11 +26,11 @@ public class Lobby
         return id;
     }
 
-    public int getGameType() {
+    int getGameType() {
         return gameType;
     }
 
-    public void joinLobby(Player player)
+    void joinLobby(Player player)
     {
         if(players.size() < gameType)
         {
@@ -43,7 +43,7 @@ public class Lobby
         players.remove(player);
     }
 
-    public int getNumberOfPlayers()
+    int getNumberOfPlayers()
     {
         return players.size();
     }
