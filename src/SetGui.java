@@ -108,8 +108,9 @@ public class SetGui implements ActionListener {
             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
         } else if (source == joinGameButton)
         {
-             out.println("JOIN_GAME");
+             //out.println("JOIN_GAME");
              frame.dispose();
+
              ChooseLobby chooseLobby = new ChooseLobby(in,out,client);
              //ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         }

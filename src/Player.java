@@ -94,52 +94,44 @@ public class Player extends Thread {
                      */
                 } else if (command.startsWith("QUIT")) {
                     return;
-                } else if (command.startsWith("JOIN_GAME"))
+                } else if (command.startsWith("JOIN_GAME_GET_LOBBY"))
                 {
-                    while(true)
+                    int lobbySize=Server.lobbyList.size();
+                    if(lobbySize == 0)
                     {
-                        if (command.startsWith("GET_LOBBY"))
+                        System.out.println(lobbySize);
+                        out.println(lobbySize);
+                        out.println("No games found. Create a new game");
+                    }
+
+                    else
+                    {
+                        out.println(lobbySize);
+                        for (Lobby l : Server.lobbyList)
                         {
-                            for (Lobby l: Server.lobbyList)
-                            {
-                                out.println("Room "+l.getId()+"  Type: " + l.getGameType() + "  Number of players: "+l.getNumberOfPlayers() );
-                            }
-                            out.println("EOL");
-                            break;
+                            out.println("Room " + l.getId() + "  Type: " + l.getGameType() + "  Number of players: " + l.getNumberOfPlayers());
                         }
-                        else if (command.startsWith("RETURN"))
-                        {
-                            break;
-                        }
+
 
                     }
 
-                            /*
-                             * TODO: if room <type> is not full join this player
-                             *       search for free room in chosen gametype
-                             *       join to lobby
-                             *       if no room send message and create new game
-                             */
 
-                }else if (command.startsWith("NEW_GAME")) {
-                    while (true) {
-                        if (command.startsWith("GAME_TYPE")) {
-                            this.gameType = Integer.parseInt(command.substring(9));
-                            int id=Server.lobbyList.get(Server.lobbyList.size()-1).getId() + 1;
-                            Lobby lobby = new Lobby(gameType,id);
-                            lobby.joinLobby(this);
 
-                            Server.lobbyList.add(lobby);
-                            break;
+                }else if (command.startsWith("NEW_GAME_TYPE")) {
+
+                    this.gameType = Integer.parseInt(command.substring(9));
+                    int id=Server.lobbyList.get(Server.lobbyList.size()-1).getId() + 1;
+                    Lobby lobby = new Lobby(gameType,id);
+                    lobby.joinLobby(this);
+
+                    Server.lobbyList.add(lobby);
+
                             /*
                              * TODO: create new game
                              *
                              */
 
-                        } else if (command.startsWith("RETURN")) {
-                            break;
-                        }
-                    }
+
                 }else if (command.startsWith("ADD_BOT")) {
                     /*
                      * TODO: add one bot to game
