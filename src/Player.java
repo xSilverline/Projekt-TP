@@ -144,9 +144,24 @@ public class Player extends Thread {
                 {
                     checkLobby();
                 }
-                else if(command.startsWith("GET_LOBBY_ID"))
+                else if(command.startsWith("GET_LOBBY_INFO"))
                 {
                     out.println(lobbyId);
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+                            out.println(l.getNumberOfPlayers());
+                            if (l.getNumberOfPlayers() != 0)
+                            {
+                                for (Player p : l.players)
+                                {
+                                    out.println(p.playerName);
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
                 else if(command.startsWith("JOIN_TO"))
                 {

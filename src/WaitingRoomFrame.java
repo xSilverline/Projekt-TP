@@ -13,6 +13,8 @@ public class WaitingRoomFrame  implements ActionListener
     private JButton returnButton;
     private JFrame waitingRoomFrame;
     private int lobbyId;
+    private int numOfPlayers;
+    private ArrayList<String> playerList = new ArrayList<>();
     private BufferedReader in;
 
     private PrintWriter out;
@@ -20,12 +22,22 @@ public class WaitingRoomFrame  implements ActionListener
     WaitingRoomFrame(int k, BufferedReader in,PrintWriter out, Client client)
     {
 
-        out.println("GET_LOBBY_ID");
+        out.println("GET_LOBBY_INFO");
         try {
             lobbyId= Integer.parseInt(in.readLine());
+            numOfPlayers = Integer.parseInt(in.readLine());
+            if(numOfPlayers !=0)
+            {
+                for(int i=0;i<numOfPlayers;i++)
+                {
+                    playerList.add(in.readLine());
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
         String tempText;
 
@@ -37,9 +49,9 @@ public class WaitingRoomFrame  implements ActionListener
         waitingRoomFrame = new JFrame();
         waitingRoomFrame.setUndecorated(true);
         ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
-        playerLabels.add(new JLabel ("Player 1"));
-        playerLabels.get(0).setBackground(Color.green);
-        playerLabels.get(0).setOpaque(true);
+       // playerLabels.add(new JLabel (playerList.get(0)));
+       // playerLabels.get(0).setBackground(Color.green);
+       // playerLabels.get(0).setOpaque(true);
 
         waitingRoomFrame.setSize(1366, 768);
         waitingRoomFrame.setLocation(250,50);
@@ -55,16 +67,27 @@ public class WaitingRoomFrame  implements ActionListener
 
         returnButton.addActionListener(this);
 
+        for(int i=0;i<=numOfPlayers-1;i++)
+        {
+            tempText = playerList.get(i);
+            playerLabels.add(new JLabel(tempText));
+            playerLabels.get(i).setBackground(Color.green);
+            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
+            playerLabels.get(i).setOpaque(true);
+            waitingRoomFrame.add(playerLabels.get(i));
+        }
 
-        for(int i=1;i<=k;i++) {
-            tempText = "Waiting for Player " + i + "...";
-            if(i>1) {
+
+        for(int i=numOfPlayers;i<k;i++)
+        {
+            tempText = "Waiting for Player " + (i+1) + "...";
+
                 playerLabels.add(new JLabel(tempText));
-                playerLabels.get(i - 1).setBackground(Color.red);
-            }
-            playerLabels.get(i-1).setBounds (20, 25+(60*(i-1)), 185, 50);
-            playerLabels.get(i-1).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i-1));
+                playerLabels.get(i).setBackground(Color.red);
+
+            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
+            playerLabels.get(i).setOpaque(true);
+            waitingRoomFrame.add(playerLabels.get(i));
         }
 
         waitingRoomFrame.setVisible(true);
