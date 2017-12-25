@@ -55,7 +55,10 @@ public class Player extends Thread {
             if(l.getId() == lobbyId)
             {
                 l.players.remove(this);
-                toRemove = l;
+                if(l.getNumberOfPlayers() == 0)
+                {
+                    toRemove = l;
+                }
                 break;
             }
         }
@@ -128,7 +131,9 @@ public class Player extends Thread {
                         out.println(lobbySize);
                         for (Lobby l : Server.lobbyList)
                         {
-                            out.println("Room " + l.getId() + "  Type: " + l.getGameType() + "  Number of players: " + l.getNumberOfPlayers());
+                            out.println(l.getId());
+                            out.println(l.getGameType());
+                            out.println(l.getNumberOfPlayers());
                         }
 
                     }
@@ -142,6 +147,22 @@ public class Player extends Thread {
                 else if(command.startsWith("GET_LOBBY_ID"))
                 {
                     out.println(lobbyId);
+                }
+                else if(command.startsWith("JOIN_TO"))
+                {
+                    lobbyId= Integer.parseInt(command.substring(7));
+                    for (Lobby l : Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+                            if(l.isFree())
+                            {
+                                l.joinLobby(this);
+                            }
+                            break;
+                        }
+                    }
+
                 }
                 else if (command.startsWith("NEW_GAME_TYPE"))
                 {

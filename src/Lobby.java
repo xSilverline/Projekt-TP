@@ -5,11 +5,20 @@ public class Lobby
     private int gameType;
     ArrayList<Player> players= new ArrayList();
     private int id;
+    private int numberOfPlayers;
 
     Lobby(int gameType,int id)
     {
         this.gameType=gameType;
         this.id=id;
+    }
+    void setNumberOfPlayers(int x)
+    {
+        this.numberOfPlayers = x;
+    }
+    int getWrittenNumberOfPlayers()
+    {
+        return numberOfPlayers;
     }
 
     public boolean isFree()

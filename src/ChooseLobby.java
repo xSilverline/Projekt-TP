@@ -14,7 +14,7 @@ public class ChooseLobby implements ActionListener
     private JButton joinButton;
     private JButton returnButton;
     private JButton refreshButton;
-    private ArrayList<String> tempList = new ArrayList<String>();
+    private ArrayList<Lobby> lobbyListHelper = new ArrayList<Lobby>();
     private JFrame chooseLobbyFrame = new JFrame();
 
     private PrintWriter out;
@@ -81,7 +81,13 @@ public class ChooseLobby implements ActionListener
             {
                 for(int i=0; i< lobbySize; i++)
                 {
-                    String temp = in.readLine();
+                    String tempId = in.readLine();
+                    String tempType = in.readLine();
+                    String tempNOP = in.readLine();
+                    Lobby tempLobby = new Lobby(Integer.parseInt(tempType),Integer.parseInt(tempId));
+                    tempLobby.setNumberOfPlayers(Integer.parseInt(tempNOP));
+                    lobbyListHelper.add(tempLobby);
+                    String temp ="Room: "+tempId+" Type: "+tempType+" Number of Players: "+tempNOP;
                     //System.out.println(temp);
                     list.addElement(temp);
                 }
@@ -110,8 +116,25 @@ public class ChooseLobby implements ActionListener
         }
         else if (source == joinButton)
          {
+
             String selectedLobby = list.getElementAt(lobbyList.getSelectedIndex());
-            // WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame()
+            String tempId = selectedLobby.substring(5,selectedLobby.indexOf("Type")).trim();
+            for(Lobby l: lobbyListHelper)
+            {
+                if(l.getId() == Integer.parseInt(tempId))
+                {
+                    if(l.getGameType()>l.getWrittenNumberOfPlayers())
+                    {
+                        out.println("JOIN_TO"+tempId);
+                        new WaitingRoomFrame(l.getGameType(),in,out,client);
+                        chooseLobbyFrame.dispose();
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null,"Room is full\n Choose another one!");
+                }
+            }
+
+
          }
          else if (source == refreshButton)
          {

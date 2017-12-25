@@ -19,13 +19,14 @@ public class WaitingRoomFrame  implements ActionListener
     private Client client;
     WaitingRoomFrame(int k, BufferedReader in,PrintWriter out, Client client)
     {
-        /*
+
         out.println("GET_LOBBY_ID");
         try {
             lobbyId= Integer.parseInt(in.readLine());
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
+
         String tempText;
 
 
