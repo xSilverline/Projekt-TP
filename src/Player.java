@@ -21,6 +21,7 @@ public class Player extends Thread {
     private BufferedReader in;
     private PrintWriter out;
     int gameType=0;
+    private int lobbyId;
 
     /**
      * Constructs a handler thread for a given socket and mark
@@ -60,19 +61,19 @@ public class Player extends Thread {
             {
                 out.println("SUBMITNAME");
                 playerName = in.readLine();
-                if (playerName == null) {
-                    return;
+                if (playerName == null)
+                {
+                    out.println("INVALID_NAME");
                 }
-                synchronized (Server.names) {
-                    if (!Server.names.contains(playerName))
-                    {
-                        Server.names.add(playerName);
-                        break;
-                    }
-                    else
-                    {
-                        out.println("INVALID_NAME");
+                else {
+                    synchronized (Server.names) {
+                        if (!Server.names.contains(playerName)) {
+                            Server.names.add(playerName);
+                            break;
+                        } else {
+                            out.println("INVALID_NAME");
 
+                        }
                     }
                 }
             }
@@ -112,17 +113,36 @@ public class Player extends Thread {
                             out.println("Room " + l.getId() + "  Type: " + l.getGameType() + "  Number of players: " + l.getNumberOfPlayers());
                         }
 
-
                     }
 
 
+                }
+                else if(command.startsWith("PLAYER_EXIT"))
+                {
+                    Server.players.remove(this);
+                    Server.names.remove(playerName);
+                }
+                else if(command.startsWith("RETURN_FROM_LOBBY"))
+                {
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+                            l.players.remove(this);
+                        }
+                    }
+                }
+                else if(command.startsWith("GET_LOBBY_ID"))
+                {
+                    out.println(lobbyId);
+                }
+                else if (command.startsWith("NEW_GAME_TYPE")) {
 
-                }else if (command.startsWith("NEW_GAME_TYPE")) {
-
-                    this.gameType = Integer.parseInt(command.substring(9));
+                    this.gameType = Integer.parseInt(command.substring(13));
                     int id=Server.lobbyList.get(Server.lobbyList.size()-1).getId() + 1;
                     Lobby lobby = new Lobby(gameType,id);
                     lobby.joinLobby(this);
+                    lobbyId = id;
 
                     Server.lobbyList.add(lobby);
 
@@ -142,8 +162,11 @@ public class Player extends Thread {
                      */
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             System.out.println("Player disconnected: " + e);
+            Server.names.remove(playerName);
+            Server.players.remove(this);
         } finally {
             try {
                 socket.close();

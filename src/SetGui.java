@@ -100,17 +100,17 @@ public class SetGui implements ActionListener {
                             "7. Gracz moze zrezygnować z ruchu w danej turze.", "How to play?", JOptionPane.INFORMATION_MESSAGE);
         } else if (source == exitButton)
         {
+            out.println("PLAYER_EXIT");
             System.exit(0);
         } else if (source == newGameButton)
         {
-            out.println("NEW_GAME");
+
             frame.dispose();
             ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
         } else if (source == joinGameButton)
         {
-             //out.println("JOIN_GAME");
-             frame.dispose();
 
+             frame.dispose();
              ChooseLobby chooseLobby = new ChooseLobby(in,out,client);
              //ChooseGameFrame chooseGameFrame = new ChooseGameFrame(out,client);
         }

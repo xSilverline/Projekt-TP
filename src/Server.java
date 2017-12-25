@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,23 +33,8 @@ import java.util.HashSet;
 
         try {
             while(true) {
-
                     new Player(listener.accept(),id).start();
-
-                    /*if(id!=0 && id!=4) {
-                        for(int i=0;i<=id;i++){
-                            if(players.get(i).gameType!=(id+1)) {
-                                break;
-                            }
-                            if(i==id){
-                                Game game = new Game(id+1);
-                            }
-                        }
-                    }*/
                     id++;
-                /*else {
-                    System.out.println("No room");
-                }*/
             }
         } finally {
             listener.close();

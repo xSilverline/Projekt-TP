@@ -106,9 +106,7 @@ public class ChooseLobby implements ActionListener
         }
         else if (source == joinButton)
          {
-             out.println("x");
 
-             chooseLobbyFrame.dispose();
             // WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame()
          }
          else if (source == refreshButton)
