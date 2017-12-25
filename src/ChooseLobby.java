@@ -40,6 +40,7 @@ public class ChooseLobby implements ActionListener
         chooseLobbyFrame.setLayout(null);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         chooseLobbyFrame.setLocation(dim.width/2-chooseLobbyFrame.getSize().width/2, dim.height/2-chooseLobbyFrame.getSize().height/2);
+        chooseLobbyFrame.getContentPane().setBackground(new Color(74, 73, 75));
 
         joinButton = new JButton("Join");
         returnButton = new JButton("Return");
@@ -49,9 +50,9 @@ public class ChooseLobby implements ActionListener
         chooseLobbyFrame.add(joinButton);
         chooseLobbyFrame.add(returnButton);
 
-        joinButton.setBounds(620,10,150,50);
-        returnButton.setBounds(325,490,150,50);
-        refreshButton.setBounds(30,10,150,50);
+        joinButton.setBounds(1200,50,150,50);
+        returnButton.setBounds(1200,700,150,50);
+        refreshButton.setBounds(30,50,150,50);
 
         returnButton.addActionListener(this);
         joinButton.addActionListener(this);
@@ -66,7 +67,7 @@ public class ChooseLobby implements ActionListener
         JScrollPane listScroller = new JScrollPane(lobbyList);
         chooseLobbyFrame.add(listScroller);
 
-        listScroller.setBounds(30,70,740,390);
+        listScroller.setBounds(30,184,766,400);
 
         getList();
     }
@@ -90,6 +91,7 @@ public class ChooseLobby implements ActionListener
                     String temp ="Room: "+tempId+" Type: "+tempType+" Number of Players: "+tempNOP;
                     //System.out.println(temp);
                     list.addElement(temp);
+                    joinButton.setEnabled(true);
                 }
             }
             else
@@ -97,6 +99,7 @@ public class ChooseLobby implements ActionListener
                 String temp = in.readLine();
                 //System.out.println(temp);
                 list.addElement(temp);
+                joinButton.setEnabled(false);
             }
         } catch (IOException e1) {
             e1.printStackTrace();

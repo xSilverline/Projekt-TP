@@ -46,11 +46,12 @@ public class WaitingRoomFrame  implements ActionListener
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         waitingRoomFrame.setLocation(dim.width/2-waitingRoomFrame.getSize().width/2, dim.height/2-waitingRoomFrame.getSize().height/2);
+        waitingRoomFrame.getContentPane().setBackground(new Color(74, 73, 75));
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
         returnButton = new JButton("Return");
         waitingRoomFrame.add(returnButton);
-        returnButton.setBounds(600,400,150,50);
+        returnButton.setBounds(1200,700,150,50);
 
         returnButton.addActionListener(this);
 
@@ -76,7 +77,7 @@ public class WaitingRoomFrame  implements ActionListener
         {
             out.println("RETURN_FROM_LOBBY");
             waitingRoomFrame.dispose();
-            ChooseGameFrame chooseGameFrame = new ChooseGameFrame(in,out,client);
+            new SetGui(client,out,in);
         }
     }
 }

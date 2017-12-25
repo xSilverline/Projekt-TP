@@ -27,7 +27,7 @@ public class ChooseGameFrame implements ActionListener {
         this.in = in;
 
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
-        chooseText.setFont(chooseText.getFont().deriveFont(20f));
+        chooseText.setFont(chooseText.getFont().deriveFont(40f));
         this.out=out;
         chooseGameFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         chooseGameFrame.setUndecorated(true);
@@ -38,7 +38,7 @@ public class ChooseGameFrame implements ActionListener {
         chooseGameFrame.setLayout(null);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         chooseGameFrame.setLocation(dim.width/2-chooseGameFrame.getSize().width/2, dim.height/2-chooseGameFrame.getSize().height/2);
-
+        chooseGameFrame.getContentPane().setBackground(new Color(74, 73, 75));
         twoPlayerButton = new JButton("2 Players");
         threePlayerButton = new JButton("3 Players");
         fourPlayerButton = new JButton("4 Players");
@@ -52,12 +52,17 @@ public class ChooseGameFrame implements ActionListener {
         chooseGameFrame.add(chooseText);
         chooseGameFrame.add(returnButton);
 
-        chooseText.setBounds(205, 10, 230, 50);
-        twoPlayerButton.setBounds(205, 65, 230, 60);
-        threePlayerButton.setBounds(205, 145, 230, 60);
-        fourPlayerButton.setBounds(205, 225, 230, 60);
-        sixPlayerButton.setBounds(205, 305, 230, 60);
-        returnButton.setBounds(450,400,130,30);
+        chooseText.setBounds(533, 50, 300, 50);
+        twoPlayerButton.setBounds(108, 250, 250, 250);
+        threePlayerButton.setBounds(408, 250, 250, 250);
+        fourPlayerButton.setBounds(708, 250, 250, 250);
+        sixPlayerButton.setBounds(1008, 250, 250, 250);
+        returnButton.setBounds(1200,700,150,50);
+
+        twoPlayerButton.setFont(twoPlayerButton.getFont().deriveFont(30f));
+        threePlayerButton.setFont(threePlayerButton.getFont().deriveFont(30f));
+        fourPlayerButton.setFont(fourPlayerButton.getFont().deriveFont(30f));
+        sixPlayerButton.setFont(sixPlayerButton.getFont().deriveFont(30f));
 
         twoPlayerButton.addActionListener(this);
         threePlayerButton.addActionListener(this);

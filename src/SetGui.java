@@ -53,8 +53,13 @@ public class SetGui implements ActionListener {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         //frame.setSize(dim.width/2,dim.height/2);
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-        //frame.getContentPane().setBackground(new Color(111, 45, 49));
-
+        frame.getContentPane().setBackground(new Color(74, 73, 75));
+        newGameButton.setFont(newGameButton.getFont().deriveFont(30f));
+        newGameButton.setBackground(new Color(111, 45, 49));
+        newGameButton.setForeground(Color.white);
+        joinGameButton.setFont(joinGameButton.getFont().deriveFont(30f));
+        joinGameButton.setForeground(Color.white);
+        joinGameButton.setBackground(new Color(111, 45, 49));
 
         //add components
         frame.add(logoText);;

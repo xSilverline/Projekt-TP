@@ -29,6 +29,7 @@ public class Client{
     {
         // Layout GUI
         setGui = new SetGui(this,out,in);
+        setGui.setButtonsDisabled();
     }
 
     /**
@@ -126,17 +127,10 @@ public class Client{
      */
     public static void main(String[] args) throws Exception
     {
-       SetupWindow setupWindow = new SetupWindow();
+        Client client = new Client();
+        SetupWindow setupWindow = new SetupWindow();
 
-
-        while (true) {
-            Client client = new Client();
-            client.play();
-            if (!client.wantsToPlayAgain()) {
-                break;
-            }
-        }
-
+        client.play();
 
     }
 }

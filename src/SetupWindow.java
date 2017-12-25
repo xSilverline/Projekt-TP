@@ -20,6 +20,7 @@ public class SetupWindow extends JDialog
         setSize(400,200);
         setLocation(400,300);
         JButton acceptButton = new JButton ("CONNECT");
+        getContentPane().setBackground(new Color(111, 69, 73));
 
         hostField = new JTextField("", 30);
 
