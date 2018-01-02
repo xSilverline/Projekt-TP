@@ -20,6 +20,8 @@ public class GameFrame extends JPanel implements MouseListener{
     private JFrame gameFrame;
     private boolean clicked=false;
     private int selectedPosition;
+    private boolean ended = false;
+    private String winner = "";
 
     GameFrame(/*BufferedReader in, PrintWriter out, Client client, ArrayList<String> playerList,*/ int n) {
         addMouseListener(this);
@@ -42,7 +44,7 @@ public class GameFrame extends JPanel implements MouseListener{
             for(int j=0;j<board.BOARD_HEIGHT;j++) {
                 if(board.getType(i,j)==0) {
                     if (j == board.BOARD_HEIGHT - 1) {
-                        posX += 23;
+                        posX += 20;
                         posY = 20;
                     }else
                         posY += 32;
@@ -73,13 +75,19 @@ public class GameFrame extends JPanel implements MouseListener{
         this.setBackground(new Color(111, 111, 111));
 
         //DRAW GAME BACKGROUND
+        g.setColor(new Color(170,140,215));
+        g.fillOval(465,125,130, 130);
+        g.setColor(new Color(100,110,200));
+        g.fillOval(675,15,130, 130);
+
+
         int posX=450;
         int posY=20;
         for(int i=0;i<board.BOARD_WIDTH;i++) {
             for(int j=0;j<board.BOARD_HEIGHT;j++) {
                 if(board.getType(i,j)==0) {
                     if (j == board.BOARD_HEIGHT - 1) {
-                        posX += 23;
+                        posX += 20;
                         posY = 20;
                     }else
                         posY += 32;
@@ -139,6 +147,11 @@ public class GameFrame extends JPanel implements MouseListener{
                 g.drawOval(temp.getX()-2, temp.getY()-2, PAWN_DIAMETER+2, PAWN_DIAMETER+2);
             }
         }
+
+        if(this.ended == true) {
+            String temp = this.winner + " wygral gre.";
+            g.drawString(temp, 550, 310);
+        }
     }
 
     String getCurrentPlayer() {
@@ -171,8 +184,12 @@ public class GameFrame extends JPanel implements MouseListener{
             for(int i = 0; i < pawns.size(); i++) {
                 if(x>pawns.get(i).getX() && x<(pawns.get(i).getX()+PAWN_DIAMETER) && y>pawns.get(i).getY() && y<(pawns.get(i).getY()+PAWN_DIAMETER)
                         && board.getType(pawns.get(i).getBoardXpos(), pawns.get(i).getBoardYpos()) == 1) {
-                    if(selectedPosition!=-1)
+                    if(selectedPosition!=-1 && moveValid(pawns.get(selectedPosition).getBoardXpos(), pawns.get(selectedPosition).getBoardYpos(),
+                                                         pawns.get(i).getBoardXpos(), pawns.get(i).getBoardYpos(), -1))
                         swapPawnPossitions(i);
+                        if(hasWinner()) {
+                            ended=true;
+                        }
                 }
                 if(pawns.get(i).ifSelected()) {
                     pawns.get(i).select(false);
@@ -184,6 +201,73 @@ public class GameFrame extends JPanel implements MouseListener{
         System.out.println("End " + selectedPosition);
         repaint();
     }
+
+    boolean moveValid(int fromPx, int fromPy, int targetPx, int targetPy, int dontCheck) {
+        int boardXfrom = fromPx;
+        int boardYfrom = fromPy;
+
+        int boardXtarget = targetPx;
+        int boardYtarget = targetPy;
+
+        if( ( (( boardXtarget==(boardXfrom-1) || boardXtarget==(boardXfrom+1) ) && ( boardYtarget==(boardYfrom-1) || boardYtarget==(boardYfrom+1) ) )
+                || ( ( boardXtarget==(boardXfrom-2) || boardXtarget==(boardXfrom+2) ) && ( boardYtarget==boardYfrom) ) )
+                || ((fromPx==targetPx) && (fromPy==targetPy)) ){
+            return true;
+        }
+
+
+        //Move by jumping
+        // *     0  1
+        // *   2  X  3
+        // *     4  5
+        /////////////////
+        int numOfPlace=0;
+        while(numOfPlace<6) {
+            if(dontCheck==numOfPlace) {
+                numOfPlace++;
+                continue;
+            }
+            switch(numOfPlace) {
+                case 0:
+                    if((board.getType(boardXfrom-1, boardYfrom-1) >= 2 && board.getType(boardXfrom-1, boardYfrom-1) <= 7) &&
+                         board.getType(boardXfrom-2, boardYfrom-2)==1 && fromPx==targetPx+2 && fromPy==targetPy+2)
+                        return true;
+                    break;
+                case 1:
+                    if((board.getType(boardXfrom+1, boardYfrom-1) >= 2 && board.getType(boardXfrom+1, boardYfrom-1) <= 7) &&
+                         board.getType(boardXfrom+2, boardYfrom-2)==1 && fromPx==targetPx-2 && fromPy==targetPy+2 )
+                        return true;
+                    break;
+                case 2:
+                    if((board.getType(boardXfrom-2, boardYfrom) >= 2 && board.getType(boardXfrom-2, boardYfrom) <= 7) &&
+                        board.getType(boardXfrom-4, boardYfrom)==1 && fromPx==targetPx+4 && fromPy==targetPy )
+                        return true;
+                    break;
+                case 3:
+                    if((board.getType(boardXfrom+2, boardYfrom) >= 2 && board.getType(boardXfrom+2, boardYfrom) <= 7) &&
+                        board.getType(boardXfrom+4, boardYfrom)==1 && fromPx==targetPx-4 && fromPy==targetPy  )
+                        return true;
+                    break;
+                case 4:
+                    if((board.getType(boardXfrom-1, boardYfrom+1) >= 2 && board.getType(boardXfrom-1, boardYfrom+1) <= 7) &&
+                         board.getType(boardXfrom-2, boardYfrom+2)==1 && fromPx==targetPx+2 && fromPy==targetPy-2  )
+                        return true;
+                    break;
+                case 5:
+                    if((board.getType(boardXfrom+1, boardYfrom+1) >= 2 && board.getType(boardXfrom+1, boardYfrom+1) <= 7) &&
+                        board.getType(boardXfrom+2, boardYfrom+2)==1  && fromPx==targetPx-2 && fromPy==targetPy-2  )
+                        return true;
+                    break;
+                default:
+                    break;
+            }
+            numOfPlace++;
+        }
+
+        return false;
+    }
+
+
 
     void swapPawnPossitions(int n) {
         int temporary = pawns.get(selectedPosition).getX(); //SWAP Xpos
@@ -207,6 +291,13 @@ public class GameFrame extends JPanel implements MouseListener{
                 board.getType(pawns.get(n).getBoardXpos(), pawns.get(n).getBoardYpos()));
         board.setType(pawns.get(n).getBoardXpos(), pawns.get(n).getBoardYpos(),
                 temporary);
+    }
+
+    boolean hasWinner() {
+        return false;
+        /*for(int i = 0; i < pawns.size(); i++) {
+            //
+        }*/
     }
 
     public static void main(String[] args) {
