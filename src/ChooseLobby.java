@@ -22,6 +22,7 @@ public class ChooseLobby implements ActionListener
 
     private JList lobbyList;
     private DefaultListModel<String> list = new DefaultListModel<String>();
+    RefreshLobbyThread thread;
 
     private Client client;
 
@@ -70,9 +71,10 @@ public class ChooseLobby implements ActionListener
         listScroller.setBounds(30,184,766,400);
 
         getList();
+
     }
 
-    private void getList()
+    void getList()
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
@@ -114,6 +116,7 @@ public class ChooseLobby implements ActionListener
          if (source == returnButton)
         {
             out.println("RETURN");
+            thread.kill();
             chooseLobbyFrame.dispose();
             SetGui setGui = new SetGui(client,out,in);
         }
@@ -130,6 +133,7 @@ public class ChooseLobby implements ActionListener
                     {
                         out.println("JOIN_TO"+tempId);
                         new WaitingRoomFrame(l.getGameType(),in,out,client);
+                        thread.kill();
                         chooseLobbyFrame.dispose();
                     }
                     else

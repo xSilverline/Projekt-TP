@@ -1,25 +1,31 @@
 public class RefreshThread extends Thread
 {
-    WaitingRoomFrame waitingRoomFrame;
+    private WaitingRoomFrame waitingRoomFrame;
+    private volatile boolean running = true;
 
     RefreshThread(WaitingRoomFrame waitingRoomFrame)
     {
         this.waitingRoomFrame=waitingRoomFrame;
     }
+    void kill()
+    {
+        running = false;
+    }
 
     public void run()
     {
-        while(true)
-        {
-            System.out.println("Thread running");
+            while (running)
+            {
+                System.out.println("Thread running");
 
-            waitingRoomFrame.getInfo();
-            //waitingRoomFrame.refreshPlayers();
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                waitingRoomFrame.getInfo();
+                //waitingRoomFrame.refreshPlayers();
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+        System.out.println("Thread finish");
     }
 }

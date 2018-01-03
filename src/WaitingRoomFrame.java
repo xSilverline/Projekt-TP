@@ -22,6 +22,7 @@ public class WaitingRoomFrame implements ActionListener
     private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
     private BufferedReader in;
     private int size;
+    private RefreshThread thread;
 
     private JList pList;
     private DefaultListModel<String> list = new DefaultListModel<String>();
@@ -40,8 +41,8 @@ public class WaitingRoomFrame implements ActionListener
         getInfo();
 
         //refreshPlayers();
-        new RefreshThread(this).start();
-
+        thread = new RefreshThread(this);
+        thread.start();
     }
 
     private void makeGui()
@@ -70,6 +71,8 @@ public class WaitingRoomFrame implements ActionListener
         refreshButton.setBounds(1200,200,150,50);
         pList=new JList();
         pList.setFont(pList.getFont().deriveFont(30f));
+        pList.setForeground(Color.WHITE);
+        pList.setBackground(new Color(0x585757));
         waitingRoomFrame.add(pList);
         pList.setBounds(30,184,766,400);
 
@@ -137,7 +140,7 @@ public class WaitingRoomFrame implements ActionListener
         if(source==returnButton)
         {
             out.println("RETURN_FROM_LOBBY");
-
+            thread.kill();
             waitingRoomFrame.dispose();
             new SetGui(client,out,in);
         }
