@@ -8,18 +8,19 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class WaitingRoomFrame  implements ActionListener
+public class WaitingRoomFrame implements ActionListener
 {
     private JButton returnButton;
     private JFrame waitingRoomFrame;
     private int lobbyId;
     private int numOfPlayers;
-    private ArrayList<String> playerList = new ArrayList<>();
+    private ArrayList<String> playerList = new ArrayList<String>();
     private BufferedReader in;
 
     private PrintWriter out;
     private Client client;
-    WaitingRoomFrame(int k, BufferedReader in,PrintWriter out, Client client)
+
+    WaitingRoomFrame(int k, BufferedReader in, PrintWriter out, Client client)
     {
 
         out.println("GET_LOBBY_INFO");
@@ -92,6 +93,7 @@ public class WaitingRoomFrame  implements ActionListener
 
         waitingRoomFrame.setVisible(true);
     }
+
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();

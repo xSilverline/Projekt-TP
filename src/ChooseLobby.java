@@ -21,7 +21,7 @@ public class ChooseLobby implements ActionListener
     private BufferedReader in;
 
     private JList lobbyList;
-    private DefaultListModel<String> list = new DefaultListModel<>();
+    private DefaultListModel<String> list = new DefaultListModel<String>();
 
     private Client client;
 

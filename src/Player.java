@@ -30,7 +30,7 @@ public class Player extends Thread {
      */
     public Player(Socket socket, int playerId) {
         this.socket = socket;
-        this.playerId=playerId;
+        this.playerId = playerId;
     }
 
     public void currentOpponent() {
@@ -193,12 +193,12 @@ public class Player extends Thread {
                         {
                         id = 1;
                     }
-                        Lobby lobby = new Lobby(gameType, id);
-                        lobby.joinLobby(this);
-                        lobbyId = id;
-                        System.out.println(id);
+                    Lobby lobby = new Lobby(gameType, id);
+                    lobby.joinLobby(this);
+                    lobbyId = id;
+                    System.out.println(id);
 
-                        Server.lobbyList.add(lobby);
+                    Server.lobbyList.add(lobby);
 
 
                             /*
