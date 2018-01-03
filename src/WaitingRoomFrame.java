@@ -10,10 +10,11 @@ import java.util.ArrayList;
 
 
 
-public class WaitingRoomFrame  implements ActionListener
+public class WaitingRoomFrame implements ActionListener
 {
     private JButton returnButton;
     private JButton runButton;
+    private JButton refreshButton;
     private JFrame waitingRoomFrame;
     private int lobbyId;
     private int numOfPlayers;
@@ -21,6 +22,9 @@ public class WaitingRoomFrame  implements ActionListener
     private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
     private BufferedReader in;
     private int size;
+
+    private JList pList;
+    private DefaultListModel<String> list = new DefaultListModel<String>();
 
     private PrintWriter out;
     private Client client;
@@ -38,10 +42,8 @@ public class WaitingRoomFrame  implements ActionListener
         //refreshPlayers();
         new RefreshThread(this).start();
 
-
-
-
     }
+
     private void makeGui()
     {
         waitingRoomFrame = new JFrame();
@@ -63,13 +65,25 @@ public class WaitingRoomFrame  implements ActionListener
         waitingRoomFrame.add(returnButton);
         returnButton.setBounds(1200,700,150,50);
 
+        refreshButton = new JButton("Refresh");
+        waitingRoomFrame.add(refreshButton);
+        refreshButton.setBounds(1200,200,150,50);
+        pList=new JList();
+        pList.setFont(pList.getFont().deriveFont(30f));
+        waitingRoomFrame.add(pList);
+        pList.setBounds(30,184,766,400);
+
         returnButton.addActionListener(this);
+        refreshButton.addActionListener(this);
         waitingRoomFrame.setVisible(true);
     }
 
     void getInfo()
     {
+        list.clear();
         playerList.clear();
+        System.out.println(numOfPlayers);
+
         out.println("GET_LOBBY_INFO");
         try {
             lobbyId= Integer.parseInt(in.readLine());
@@ -84,31 +98,36 @@ public class WaitingRoomFrame  implements ActionListener
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(numOfPlayers);
 
         playerLabels.clear();
+        System.out.println(playerLabels.isEmpty());
+        //---------------
         String tempText;
-        for(int i=0;i<=numOfPlayers-1;i++)
+        for(int i=0;i<numOfPlayers;i++)
         {
             tempText = playerList.get(i);
+            list.addElement(tempText);
+            /*
             playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.green);
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i));
+            //waitingRoomFrame.add(playerLabels.get(i));*/
         }
-
 
         for(int i=numOfPlayers;i<size;i++)
         {
             tempText = "Waiting for Player " + (i+1) + "...";
-
-            playerLabels.add(new JLabel(tempText));
+            list.addElement(tempText);
+           /* playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.red);
 
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i));
+            //waitingRoomFrame.add(playerLabels.get(i));*/
         }
+        pList.setModel(list);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -121,6 +140,13 @@ public class WaitingRoomFrame  implements ActionListener
 
             waitingRoomFrame.dispose();
             new SetGui(client,out,in);
+        }
+        else if(source == refreshButton)
+        {
+
+            //new WaitingRoomFrame(size,in,out,client);
+
+            getInfo();
         }
 
     }
