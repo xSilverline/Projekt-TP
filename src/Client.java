@@ -1,14 +1,7 @@
-import sun.font.GlyphDisposedListener;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Client{
 
@@ -67,7 +60,7 @@ public class Client{
                     out.println(playerName);
                 } else if (response.startsWith("INVALID_NAME")) {
                     JOptionPane.showMessageDialog(null, "Name already taken\nchoose another one");
-                    SetupWindow setupWindow = new SetupWindow();
+                    new SetupWindow();
                 } else if (response.startsWith("NAMEACCEPTED")) {
                     connected = true;
                     JOptionPane.showMessageDialog(null, "CONNECTED");
@@ -105,6 +98,9 @@ public class Client{
                     break;
                 } else if (response.startsWith("MESSAGE")) {
                     setGui.messageLabel.setText(response.substring(8));
+                } else if (response.startsWith("PLAYER_JOINED"))
+                {
+
                 }
             }
             out.println("QUIT");
@@ -128,7 +124,7 @@ public class Client{
     public static void main(String[] args) throws Exception
     {
         Client client = new Client();
-        SetupWindow setupWindow = new SetupWindow();
+        new SetupWindow();
 
         client.play();
 

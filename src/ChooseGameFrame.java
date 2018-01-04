@@ -23,11 +23,16 @@ public class ChooseGameFrame implements ActionListener {
     ChooseGameFrame(BufferedReader in,PrintWriter out, Client client)
     {
         this.client=client;
+        this.out = out;
         this.in = in;
 
+        makeGui();
+
+    }
+    private void makeGui()
+    {
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
         chooseText.setFont(chooseText.getFont().deriveFont(40f));
-        this.out=out;
         chooseGameFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         chooseGameFrame.setUndecorated(true);
 
@@ -78,24 +83,28 @@ public class ChooseGameFrame implements ActionListener {
         if (source == twoPlayerButton) {
             out.println("NEW_GAME_TYPE" + 2);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(2,in,out,client);
+            new WaitingRoomFrame(2,in,out,client);
+
         } else if (source == threePlayerButton) {
             out.println("NEW_GAME_TYPE" + 3);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(3,in,out,client);
+            new WaitingRoomFrame(3,in,out,client);
+
         } else if (source == fourPlayerButton) {
             out.println("NEW_GAME_TYPE" + 4);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(4,in,out,client);
+            new WaitingRoomFrame(4,in,out,client);
+
         } else if (source == sixPlayerButton) {
             out.println("NEW_GAME_TYPE" + 6);
             chooseGameFrame.dispose();
-            WaitingRoomFrame waitingRoomFrame = new WaitingRoomFrame(6,in,out,client);
+            new WaitingRoomFrame(6,in,out,client);
+
         } else if (source == returnButton)
         {
             out.println("RETURN");
             chooseGameFrame.dispose();
-            SetGui setGui = new SetGui(client,out,in);
+            new SetGui(client,out,in);
         }
     }
 }

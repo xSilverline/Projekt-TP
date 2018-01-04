@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -18,14 +17,13 @@ public class WaitingRoomFrame implements ActionListener
     private JFrame waitingRoomFrame;
     private int lobbyId;
     private int numOfPlayers;
-    private ArrayList<String> playerList = new ArrayList<String>();
-    private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
+    private ArrayList<String> playerList = new ArrayList<>();
+    private ArrayList<JLabel> playerLabels = new ArrayList<>();
     private BufferedReader in;
     private int size;
-    private RefreshThread thread;
 
     private JList pList;
-    private DefaultListModel<String> list = new DefaultListModel<String>();
+    private DefaultListModel<String> list = new DefaultListModel<>();
 
     private PrintWriter out;
     private Client client;
@@ -38,11 +36,9 @@ public class WaitingRoomFrame implements ActionListener
         this.client=client;
 
         makeGui();
-        getInfo();
+        getList();
 
         //refreshPlayers();
-        thread = new RefreshThread(this);
-        thread.start();
     }
 
     private void makeGui()
@@ -81,56 +77,54 @@ public class WaitingRoomFrame implements ActionListener
         waitingRoomFrame.setVisible(true);
     }
 
-    void getInfo()
+    private void getList()
     {
-        list.clear();
-        playerList.clear();
-        System.out.println(numOfPlayers);
 
-        out.println("GET_LOBBY_INFO");
-        try {
-            lobbyId= Integer.parseInt(in.readLine());
-            numOfPlayers = Integer.parseInt(in.readLine());
-            if(numOfPlayers !=0)
-            {
-                for(int i=0;i<numOfPlayers;i++)
-                {
-                    playerList.add(in.readLine());
+            list.clear();
+            playerList.clear();
+            System.out.println(numOfPlayers);
+
+            out.println("GET_LOBBY_INFO");
+            try {
+                lobbyId = Integer.parseInt(in.readLine());
+                numOfPlayers = Integer.parseInt(in.readLine());
+                if (numOfPlayers != 0) {
+                    for (int i = 0; i < numOfPlayers; i++) {
+                        playerList.add(in.readLine());
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(numOfPlayers);
+            System.out.println(numOfPlayers);
 
-        playerLabels.clear();
-        System.out.println(playerLabels.isEmpty());
-        //---------------
-        String tempText;
-        for(int i=0;i<numOfPlayers;i++)
-        {
-            tempText = playerList.get(i);
-            list.addElement(tempText);
+            playerLabels.clear();
+            System.out.println(playerLabels.isEmpty());
+            //---------------
+            String tempText;
+            for (int i = 0; i < numOfPlayers; i++) {
+                tempText = playerList.get(i);
+                list.addElement(tempText);
             /*
             playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.green);
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
             //waitingRoomFrame.add(playerLabels.get(i));*/
-        }
+            }
 
-        for(int i=numOfPlayers;i<size;i++)
-        {
-            tempText = "Waiting for Player " + (i+1) + "...";
-            list.addElement(tempText);
+            for (int i = numOfPlayers; i < size; i++) {
+                tempText = "Waiting for Player " + (i + 1) + "...";
+                list.addElement(tempText);
            /* playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.red);
 
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
             //waitingRoomFrame.add(playerLabels.get(i));*/
-        }
-        pList.setModel(list);
+            }
+            pList.setModel(list);
+
     }
 
     public void actionPerformed(ActionEvent e)
@@ -140,7 +134,6 @@ public class WaitingRoomFrame implements ActionListener
         if(source==returnButton)
         {
             out.println("RETURN_FROM_LOBBY");
-            thread.kill();
             waitingRoomFrame.dispose();
             new SetGui(client,out,in);
         }
@@ -149,7 +142,7 @@ public class WaitingRoomFrame implements ActionListener
 
             //new WaitingRoomFrame(size,in,out,client);
 
-            getInfo();
+            getList();
         }
 
     }

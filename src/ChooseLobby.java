@@ -14,15 +14,15 @@ public class ChooseLobby implements ActionListener
     private JButton joinButton;
     private JButton returnButton;
     private JButton refreshButton;
-    private ArrayList<Lobby> lobbyListHelper = new ArrayList<Lobby>();
+    private ArrayList<Lobby> lobbyListHelper = new ArrayList<>();
     private JFrame chooseLobbyFrame = new JFrame();
 
     private PrintWriter out;
     private BufferedReader in;
 
     private JList lobbyList;
-    private DefaultListModel<String> list = new DefaultListModel<String>();
-    RefreshLobbyThread thread;
+    private DefaultListModel<String> list = new DefaultListModel<>();
+
 
     private Client client;
 
@@ -32,6 +32,12 @@ public class ChooseLobby implements ActionListener
         this.client=client;
         this.out=out;
 
+        makeGui();
+        getList();
+    }
+
+    private void makeGui()
+    {
         chooseLobbyFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         chooseLobbyFrame.setUndecorated(true);
 
@@ -69,12 +75,9 @@ public class ChooseLobby implements ActionListener
         chooseLobbyFrame.add(listScroller);
 
         listScroller.setBounds(30,184,766,400);
-
-        getList();
-
     }
 
-    void getList()
+    private void getList()
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
@@ -116,9 +119,8 @@ public class ChooseLobby implements ActionListener
          if (source == returnButton)
         {
             out.println("RETURN");
-            thread.kill();
             chooseLobbyFrame.dispose();
-            SetGui setGui = new SetGui(client,out,in);
+            new SetGui(client,out,in);
         }
         else if (source == joinButton)
          {
@@ -133,7 +135,6 @@ public class ChooseLobby implements ActionListener
                     {
                         out.println("JOIN_TO"+tempId);
                         new WaitingRoomFrame(l.getGameType(),in,out,client);
-                        thread.kill();
                         chooseLobbyFrame.dispose();
                     }
                     else

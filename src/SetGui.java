@@ -25,6 +25,12 @@ public class SetGui implements ActionListener {
         this.client=client;
         this.in = in;
 
+        makeGui();
+
+    }
+
+    private void makeGui()
+    {
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setTitle(messageLabel.getText());
         frame.setUndecorated(true);
@@ -60,7 +66,7 @@ public class SetGui implements ActionListener {
         joinGameButton.setBackground(new Color(111, 45, 49));
 
         //add components
-        frame.add(logoText);;
+        frame.add(logoText);
         frame.add(instructionButton);
         frame.add(exitButton);
         frame.add(newGameButton);

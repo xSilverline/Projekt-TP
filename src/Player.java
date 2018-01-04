@@ -10,7 +10,6 @@
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 
 public class Player extends Thread {
@@ -20,7 +19,7 @@ public class Player extends Thread {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    int gameType=0;
+    private int gameType=0;
     private int lobbyId;
 
     /**
@@ -47,7 +46,7 @@ public class Player extends Thread {
          */
     }
 
-    void checkLobby()
+    private void checkLobby()
     {
         Lobby toRemove=null;
         for(Lobby l: Server.lobbyList)
@@ -74,8 +73,8 @@ public class Player extends Thread {
     public void run()
     {
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new PrintWriter(socket.getOutputStream(), true);
 
 
             while (true)
