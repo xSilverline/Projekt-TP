@@ -3,11 +3,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
-public class ChooseGameFrame implements ActionListener {
+public class ChooseGameFrame extends NewWindowFrame {
     private JButton twoPlayerButton;
     private JButton threePlayerButton;
     private JButton fourPlayerButton;
@@ -29,7 +28,7 @@ public class ChooseGameFrame implements ActionListener {
         makeGui();
 
     }
-    private void makeGui()
+    void makeGui()
     {
         JLabel chooseText = new JLabel("Choose Game Type",SwingConstants.CENTER);
         chooseText.setFont(chooseText.getFont().deriveFont(40f));
@@ -75,6 +74,11 @@ public class ChooseGameFrame implements ActionListener {
         returnButton.addActionListener(this);
 
         chooseGameFrame.setVisible(true);
+    }
+
+    @Override
+    void getList() {
+
     }
 
     public void actionPerformed(ActionEvent e)

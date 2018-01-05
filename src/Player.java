@@ -54,6 +54,10 @@ public class Player extends Thread {
             if(l.getId() == lobbyId)
             {
                 l.players.remove(this);
+                for (Player p : l.players)
+                {
+                    p.out.println("PLAYER_REFRESH");
+                }
                 if(l.getNumberOfPlayers() == 0)
                 {
                     toRemove = l;
@@ -141,7 +145,9 @@ public class Player extends Thread {
                 }
                 else if(command.startsWith("RETURN_FROM_LOBBY"))
                 {
+
                     checkLobby();
+
                 }
                 else if(command.startsWith("GET_LOBBY_INFO"))
                 {
@@ -171,7 +177,12 @@ public class Player extends Thread {
                         {
                             if(l.isFree())
                             {
+                                for(Player p: l.players)
+                                {
+                                    p.out.println("PLAYER_REFRESH");
+                                }
                                 l.joinLobby(this);
+
                             }
                             break;
                         }
@@ -199,13 +210,6 @@ public class Player extends Thread {
 
                     Server.lobbyList.add(lobby);
 
-
-                            /*
-                             * TODO: create new game
-                             *
-                             */
-
-
                 }else if (command.startsWith("ADD_BOT")) {
                     /*
                      * TODO: add one bot to game
@@ -218,10 +222,10 @@ public class Player extends Thread {
             }
         } catch (IOException e)
         {
-            System.out.println("Player disconnected: " + e);
             checkLobby();
             Server.names.remove(playerName);
             Server.players.remove(this);
+            System.out.println("Player disconnected: " + e);
         } finally {
             try {
                 socket.close();

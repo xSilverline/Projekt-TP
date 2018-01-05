@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 
-public class WaitingRoomFrame implements ActionListener
+public class WaitingRoomFrame extends NewWindowFrame
 {
     private JButton returnButton;
     private JButton runButton;
@@ -35,13 +35,16 @@ public class WaitingRoomFrame implements ActionListener
         this.out=out;
         this.client=client;
 
+
+
         makeGui();
         getList();
 
+        this.client.setWaitingRoomObserver(this);
         //refreshPlayers();
     }
 
-    private void makeGui()
+    void makeGui()
     {
         waitingRoomFrame = new JFrame();
         waitingRoomFrame.setUndecorated(true);
@@ -77,13 +80,12 @@ public class WaitingRoomFrame implements ActionListener
         waitingRoomFrame.setVisible(true);
     }
 
-    private void getList()
+    void getList()
     {
-
-            list.clear();
-            playerList.clear();
             System.out.println(numOfPlayers);
 
+            playerList.clear();
+            list.clear();
             out.println("GET_LOBBY_INFO");
             try {
                 lobbyId = Integer.parseInt(in.readLine());
@@ -98,13 +100,12 @@ public class WaitingRoomFrame implements ActionListener
             }
             System.out.println(numOfPlayers);
 
-            playerLabels.clear();
-            System.out.println(playerLabels.isEmpty());
             //---------------
             String tempText;
             for (int i = 0; i < numOfPlayers; i++) {
                 tempText = playerList.get(i);
-                list.addElement(tempText);
+                list.add(i,tempText);
+
             /*
             playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.green);
@@ -115,7 +116,7 @@ public class WaitingRoomFrame implements ActionListener
 
             for (int i = numOfPlayers; i < size; i++) {
                 tempText = "Waiting for Player " + (i + 1) + "...";
-                list.addElement(tempText);
+                list.add(i,tempText);
            /* playerLabels.add(new JLabel(tempText));
             playerLabels.get(i).setBackground(Color.red);
 
@@ -124,7 +125,6 @@ public class WaitingRoomFrame implements ActionListener
             //waitingRoomFrame.add(playerLabels.get(i));*/
             }
             pList.setModel(list);
-
     }
 
     public void actionPerformed(ActionEvent e)

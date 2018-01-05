@@ -7,6 +7,8 @@ public class Client{
 
     private SetGui setGui;
     private boolean connected=false;
+    static private WaitingRoomObserver waitingRoomObserver;
+
 
     private Socket socket;
 
@@ -14,16 +16,30 @@ public class Client{
     private PrintWriter out;
     static String playerName;
     static String hostName;
+
     /**
      * Constructs the client by connecting to a server, laying out the
      * GUI and registering GUI listeners.
      */
+
     public Client() throws Exception
     {
         // Layout GUI
         setGui = new SetGui(this,out,in);
         setGui.setButtonsDisabled();
+        waitingRoomObserver = new WaitingRoomObserver();
     }
+
+
+    public void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
+    {
+        waitingRoomObserver.setSubject(waitingRoomFrame);
+    }
+/*
+    public void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
+    {
+        waitingRoomObserver.setSubject(waitingRoomFrame);
+    }*/
 
     /**
      * The main thread of the client will listen for messages
@@ -38,6 +54,7 @@ public class Client{
      * message is recevied then the loop will exit and the server
      * will be sent a "QUIT" message also.
      */
+
     private void play() throws Exception {
         String response;
         try {
@@ -98,9 +115,10 @@ public class Client{
                     break;
                 } else if (response.startsWith("MESSAGE")) {
                     setGui.messageLabel.setText(response.substring(8));
-                } else if (response.startsWith("PLAYER_JOINED"))
+                } else if (response.startsWith("PLAYER_REFRESH"))
                 {
-
+                    waitingRoomObserver.update();
+                    System.out.println("UP");
                 }
             }
             out.println("QUIT");

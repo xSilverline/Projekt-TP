@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
-public class ChooseLobby implements ActionListener
+public class ChooseLobby extends NewWindowFrame
 {
     private JButton joinButton;
     private JButton returnButton;
@@ -36,7 +36,7 @@ public class ChooseLobby implements ActionListener
         getList();
     }
 
-    private void makeGui()
+    void makeGui()
     {
         chooseLobbyFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         chooseLobbyFrame.setUndecorated(true);
@@ -77,7 +77,7 @@ public class ChooseLobby implements ActionListener
         listScroller.setBounds(30,184,766,400);
     }
 
-    private void getList()
+    void getList()
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
