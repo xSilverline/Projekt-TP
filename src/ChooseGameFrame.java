@@ -3,7 +3,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class ChooseGameFrame extends NewWindowFrame {
@@ -15,18 +14,14 @@ public class ChooseGameFrame extends NewWindowFrame {
     private JFrame chooseGameFrame = new JFrame();
 
     private PrintWriter out;
-    private BufferedReader in;
-
     private Client client;
 
-    ChooseGameFrame(BufferedReader in,PrintWriter out, Client client)
+    ChooseGameFrame(PrintWriter out, Client client)
     {
         this.client=client;
         this.out = out;
-        this.in = in;
 
         makeGui();
-
     }
     void makeGui()
     {

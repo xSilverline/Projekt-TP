@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,7 +15,6 @@ public class ChooseLobby extends NewWindowFrame
     private JFrame chooseLobbyFrame = new JFrame();
 
     private PrintWriter out;
-    private BufferedReader in;
 
     JList lobbyList;
     DefaultListModel<String> list = new DefaultListModel<>();
@@ -26,9 +22,8 @@ public class ChooseLobby extends NewWindowFrame
 
     private Client client;
 
-    ChooseLobby(BufferedReader in, PrintWriter out, Client client)
+    ChooseLobby(PrintWriter out, Client client)
     {
-        this.in = in;
         this.client=client;
         this.out=out;
 
@@ -81,35 +76,6 @@ public class ChooseLobby extends NewWindowFrame
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
-        /*try {
-            int lobbySize = Integer.parseInt(in.readLine());
-            if(lobbySize != 0)
-            {
-                for(int i=0; i< lobbySize; i++)
-                {
-                    String tempId = in.readLine();
-                    String tempType = in.readLine();
-                    String tempNOP = in.readLine();
-                    Lobby tempLobby = new Lobby(Integer.parseInt(tempType),Integer.parseInt(tempId));
-                    tempLobby.setNumberOfPlayers(Integer.parseInt(tempNOP));
-                    lobbyListHelper.add(tempLobby);
-                    String temp ="Room: "+tempId+" Type: "+tempType+" Number of Players: "+tempNOP;
-                    //System.out.println(temp);
-                    list.addElement(temp);
-                    joinButton.setEnabled(true);
-                }
-            }
-            else
-            {
-                String temp = in.readLine();
-                //System.out.println(temp);
-                list.addElement(temp);
-                joinButton.setEnabled(false);
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        lobbyList.setModel(list);*/
 
     }
 

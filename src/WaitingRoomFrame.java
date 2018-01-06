@@ -1,13 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-
-
 
 public class WaitingRoomFrame extends NewWindowFrame
 {
@@ -15,11 +9,7 @@ public class WaitingRoomFrame extends NewWindowFrame
     private JButton runButton;
     private JButton refreshButton;
     private JFrame waitingRoomFrame;
-    private int lobbyId;
-    private int numOfPlayers;
-    private ArrayList<String> playerList = new ArrayList<>();
-    private ArrayList<JLabel> playerLabels = new ArrayList<>();
-    private BufferedReader in;
+
     int size;
     private boolean readyPlayer;
 
@@ -29,14 +19,11 @@ public class WaitingRoomFrame extends NewWindowFrame
     private PrintWriter out;
     private Client client;
 
-    WaitingRoomFrame(int k, BufferedReader in, PrintWriter out, Client client)
+    WaitingRoomFrame(int k, PrintWriter out, Client client)
     {
         this.size=k;
-        this.in = in;
         this.out=out;
         this.client=client;
-
-
 
         makeGui();
         getList();
@@ -88,9 +75,7 @@ public class WaitingRoomFrame extends NewWindowFrame
 
     void getList()
     {
-            System.out.println(numOfPlayers);
 
-            playerList.clear();
             list.clear();
             out.println("GET_LOBBY_INFO");
           /*  try {

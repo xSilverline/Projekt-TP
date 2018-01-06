@@ -37,22 +37,22 @@ public class Client{
 
     void setWaitingRoomFrame(int k)
     {
-        waitingRoomFrame = new WaitingRoomFrame(k,in,out,this);
+        waitingRoomFrame = new WaitingRoomFrame(k,out,this);
     }
 
     void setChooseGameFrame()
     {
-        chooseGameFrame = new ChooseGameFrame(in,out,this);
+        chooseGameFrame = new ChooseGameFrame(out,this);
     }
 
     void setChooseLobby()
     {
-        chooseLobby = new ChooseLobby(in,out,this);
+        chooseLobby = new ChooseLobby(out,this);
     }
 
     void makeGui()
     {
-        setGui = new SetGui(this,out,in);
+        setGui = new SetGui(this);
     }
 
     private void createGame()
@@ -87,8 +87,6 @@ public class Client{
                     socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-
-            setGui.setConn(out,in);
             setGui.setButtonsDisabled();
 
 
@@ -141,7 +139,7 @@ public class Client{
                 } else if (response.startsWith("PLAYER_REFRESH"))
                 {
                     waitingRoomFrame.getList();
-                    
+
                     System.out.println("UP");
                 }
                 else if (response.startsWith("START_GAME"))
@@ -207,6 +205,7 @@ public class Client{
                     }
 
                     waitingRoomFrame.pList.setModel(waitingRoomFrame.list);
+                    playerList.clear();
 
                 }
             }

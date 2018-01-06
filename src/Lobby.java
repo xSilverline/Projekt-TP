@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Lobby
 {
     private int gameType;
-    ArrayList<Player> players= new ArrayList();
+    ArrayList<Player> players= new ArrayList<>();
     private int id;
     private int numberOfPlayers;
 
@@ -21,7 +21,7 @@ public class Lobby
         return numberOfPlayers;
     }
 
-    public boolean areReady()
+    boolean areReady()
     {
         int count = 0;
         for(Player p : players)
@@ -39,7 +39,7 @@ public class Lobby
             return false;
     }
 
-    public boolean isFree()
+    boolean isFree()
     {
         if(players.size() < gameType)
         {

@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 
 public class SetGui implements ActionListener {
 
@@ -14,16 +12,10 @@ public class SetGui implements ActionListener {
     private JButton exitButton;
     private JButton newGameButton;
     private JButton joinGameButton;
-    private PrintWriter out;
-    private BufferedReader in;
 
-
-
-    SetGui(Client client, PrintWriter out, BufferedReader in)
+    SetGui(Client client)
     {
-        this.out=out;
         this.client=client;
-        this.in = in;
 
         makeGui();
     }
@@ -88,11 +80,6 @@ public class SetGui implements ActionListener {
         frame.setVisible(true);
     }
 
-    void setConn(PrintWriter out, BufferedReader in)
-    {
-        this.out=out;
-        this.in=in;
-    }
     void setButtonsEnabled()
     {
         joinGameButton.setEnabled(true);
