@@ -2,12 +2,13 @@
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client{
 
     private SetGui setGui;
     private boolean connected=false;
-    static private WaitingRoomObserver waitingRoomObserver;
+
     private WaitingRoomFrame waitingRoomFrame;
     private ChooseGameFrame chooseGameFrame;
     private ChooseLobby chooseLobby;
@@ -31,7 +32,7 @@ public class Client{
         // Layout GUI
         makeGui();
         setGui.setButtonsDisabled();
-        waitingRoomObserver = new WaitingRoomObserver();
+
     }
 
     void setWaitingRoomFrame(int k)
@@ -61,16 +62,6 @@ public class Client{
         //TODO: Give type to gameframe from server
     }
 
-
-    void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
-    {
-        waitingRoomObserver.setSubject(waitingRoomFrame);
-    }
-/*
-    public void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
-    {
-        waitingRoomObserver.setSubject(waitingRoomFrame);
-    }*/
 
     /**
      * The main thread of the client will listen for messages
@@ -120,6 +111,7 @@ public class Client{
 
             while (true)
             {
+                response = in.readLine();
                 if (response.startsWith("VALID_MOVE")) {
                     setGui.messageLabel.setText("Valid move, wait for next turn.");
                 } else if (response.startsWith("OPPONENT_MOVED")) {
@@ -149,12 +141,72 @@ public class Client{
                 } else if (response.startsWith("PLAYER_REFRESH"))
                 {
                     waitingRoomFrame.getList();
+                    
                     System.out.println("UP");
                 }
                 else if (response.startsWith("START_GAME"))
                 {
                     waitingRoomFrame.closeWindow();
                     createGame();
+
+                }
+                else if(response.startsWith("NULL_LOBBY_SIZE"))
+                {
+                    String temp = "No games found. Create a new game";
+                    //System.out.println(temp);
+                    chooseLobby.list.addElement(temp);
+                    chooseLobby.joinButton.setEnabled(false);
+                    chooseLobby.lobbyList.setModel(chooseLobby.list);
+                }
+                else if(response.startsWith("LOBBY_SIZE"))
+                {
+                    int lobbySize = Integer.parseInt(response.substring(10));
+                    for(int i=0; i< lobbySize; i++)
+                    {
+                        String tempId = in.readLine();
+                        String tempType = in.readLine();
+                        String tempNOP = in.readLine();
+                        Lobby tempLobby = new Lobby(Integer.parseInt(tempType),Integer.parseInt(tempId));
+                        tempLobby.setNumberOfPlayers(Integer.parseInt(tempNOP));
+                        chooseLobby.lobbyListHelper.add(tempLobby);
+                        String temp ="Room: "+tempId+" Type: "+tempType+" Number of Players: "+tempNOP;
+                        //System.out.println(temp);
+                        chooseLobby.list.addElement(temp);
+                        chooseLobby.joinButton.setEnabled(true);
+                    }
+                    chooseLobby.lobbyList.setModel(chooseLobby.list);
+                }
+                else if(response.startsWith("ROOM_INFO"))
+                {
+                    int lobbyId;
+                    int numOfPlayers =0;
+                    ArrayList<String> playerList = new ArrayList<>();
+                    try {
+                        lobbyId = Integer.parseInt(in.readLine());
+                        numOfPlayers = Integer.parseInt(in.readLine());
+                        if (numOfPlayers != 0) {
+                            for (int i = 0; i < numOfPlayers; i++) {
+                                playerList.add(in.readLine());
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //System.out.println(numOfPlayers);
+
+                    //---------------
+                    String tempText;
+                    for (int i = 0; i < numOfPlayers; i++) {
+                        tempText = playerList.get(i);
+                        waitingRoomFrame.list.add(i,tempText);
+                    }
+
+                    for (int i = numOfPlayers; i < waitingRoomFrame.size; i++) {
+                        tempText = "Waiting for Player " + (i + 1) + "...";
+                        waitingRoomFrame.list.add(i, tempText);
+                    }
+
+                    waitingRoomFrame.pList.setModel(waitingRoomFrame.list);
 
                 }
             }

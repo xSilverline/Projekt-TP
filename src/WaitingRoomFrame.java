@@ -20,11 +20,11 @@ public class WaitingRoomFrame extends NewWindowFrame
     private ArrayList<String> playerList = new ArrayList<>();
     private ArrayList<JLabel> playerLabels = new ArrayList<>();
     private BufferedReader in;
-    private int size;
+    int size;
     private boolean readyPlayer;
 
-    private JList pList;
-    private DefaultListModel<String> list = new DefaultListModel<>();
+    JList pList;
+    DefaultListModel<String> list = new DefaultListModel<>();
 
     private PrintWriter out;
     private Client client;
@@ -42,7 +42,6 @@ public class WaitingRoomFrame extends NewWindowFrame
         getList();
         readyPlayer = false;
 
-        this.client.setWaitingRoomObserver(this);
         //refreshPlayers();
     }
 
@@ -94,7 +93,7 @@ public class WaitingRoomFrame extends NewWindowFrame
             playerList.clear();
             list.clear();
             out.println("GET_LOBBY_INFO");
-            try {
+          /*  try {
                 lobbyId = Integer.parseInt(in.readLine());
                 numOfPlayers = Integer.parseInt(in.readLine());
                 if (numOfPlayers != 0) {
@@ -118,7 +117,7 @@ public class WaitingRoomFrame extends NewWindowFrame
             playerLabels.get(i).setBackground(Color.green);
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
-            //waitingRoomFrame.add(playerLabels.get(i));*/
+            //waitingRoomFrame.add(playerLabels.get(i));
             }
 
             for (int i = numOfPlayers; i < size; i++) {
@@ -129,9 +128,9 @@ public class WaitingRoomFrame extends NewWindowFrame
 
             playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
             playerLabels.get(i).setOpaque(true);
-            //waitingRoomFrame.add(playerLabels.get(i));*/
+            //waitingRoomFrame.add(playerLabels.get(i));
             }
-            pList.setModel(list);
+            pList.setModel(list);*/
     }
 
     @Override

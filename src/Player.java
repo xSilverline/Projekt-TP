@@ -132,13 +132,13 @@ public class Player extends Thread {
                     if(lobbySize == 0)
                     {
                         System.out.println(lobbySize);
-                        out.println(lobbySize);
-                        out.println("No games found. Create a new game");
+                        out.println("NULL_LOBBY_SIZE");
+                        //out.println("No games found. Create a new game");
                     }
 
                     else
                     {
-                        out.println(lobbySize);
+                        out.println("LOBBY_SIZE"+lobbySize);
                         for (Lobby l : Server.lobbyList)
                         {
                             out.println(l.getId());
@@ -191,6 +191,7 @@ public class Player extends Thread {
                 }
                 else if(command.startsWith("GET_LOBBY_INFO"))
                 {
+                    out.println("ROOM_INFO");
                     out.println(lobbyId);
                     for(Lobby l: Server.lobbyList)
                     {

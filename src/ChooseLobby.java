@@ -11,17 +11,17 @@ import java.util.ArrayList;
 
 public class ChooseLobby extends NewWindowFrame
 {
-    private JButton joinButton;
+    JButton joinButton;
     private JButton returnButton;
     private JButton refreshButton;
-    private ArrayList<Lobby> lobbyListHelper = new ArrayList<>();
+    ArrayList<Lobby> lobbyListHelper = new ArrayList<>();
     private JFrame chooseLobbyFrame = new JFrame();
 
     private PrintWriter out;
     private BufferedReader in;
 
-    private JList lobbyList;
-    private DefaultListModel<String> list = new DefaultListModel<>();
+    JList lobbyList;
+    DefaultListModel<String> list = new DefaultListModel<>();
 
 
     private Client client;
@@ -81,7 +81,7 @@ public class ChooseLobby extends NewWindowFrame
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
-        try {
+        /*try {
             int lobbySize = Integer.parseInt(in.readLine());
             if(lobbySize != 0)
             {
@@ -109,7 +109,7 @@ public class ChooseLobby extends NewWindowFrame
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        lobbyList.setModel(list);
+        lobbyList.setModel(list);*/
 
     }
 
