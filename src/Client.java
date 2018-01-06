@@ -12,7 +12,7 @@ public class Client{
     private WaitingRoomFrame waitingRoomFrame;
     private ChooseGameFrame chooseGameFrame;
     private ChooseLobby chooseLobby;
-    private GameFrame gameFrame;
+    private GameRunFrame gameRunFrame;
 
 
     private Socket socket;
@@ -57,9 +57,14 @@ public class Client{
 
     private void createGame()
     {
-        gameFrame = new GameFrame(2);
-
+        gameRunFrame = new GameRunFrame(6,this,out);
         //TODO: Give type to gameframe from server
+    }
+
+    void closeGame()
+    {
+        gameRunFrame.dispose();
+        makeGui();
     }
 
 

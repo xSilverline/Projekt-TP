@@ -2,17 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Graphics2D;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.ArrayList;
 
-public class GameFrame extends JPanel implements MouseListener{
-    public int PAWN_DIAMETER = 30;
+public class GameFrame extends JPanel implements MouseListener,ActionListener{
+    private int PAWN_DIAMETER = 30;
 
-    //private ArrayList<String> playerList = new ArrayList<String>();
+    private ArrayList<String> playerList = new ArrayList<String>();
     //private BufferedReader in;
-    //private PrintWriter out;
-    //private Client client;
-
+    private PrintWriter out;
+    private Client client;
+    private JButton exitButton;
     private int numOfPlayers;
     private Board board;
     private ArrayList<Pawn> pawns = new ArrayList<>();
@@ -23,16 +24,21 @@ public class GameFrame extends JPanel implements MouseListener{
     private boolean ended = false;
     private String winner = "";
 
-    GameFrame(/*BufferedReader in, PrintWriter out, Client client, ArrayList<String> playerList,*/ int n) {
+    GameFrame(/*BufferedReader in, PrintWriter out, Client client, ArrayList<String> playerList,*/ int n,Client client,PrintWriter out) {
         addMouseListener(this);
         currentPlayer="Player1";
         //this.playerList = playerList;
-        //this.out = out;
+        this.out = out;
         //this.in = in;
-        //this.client = client;
+        this.client = client;
         this.numOfPlayers = n;
         //setResizable(false);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+        exitButton = new JButton("EXIT");
+        add(exitButton);
+        exitButton.setBounds(1200,700,100,35);
+        exitButton.addActionListener(this);
 
         board = new Board(this.numOfPlayers);
         //addMouseMotionListener(this);
@@ -300,6 +306,22 @@ public class GameFrame extends JPanel implements MouseListener{
         }*/
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        Object source = e.getSource();
+        if (source == exitButton)
+        {
+            int result = JOptionPane.showConfirmDialog(null,"Do You really want to leave this game?","You are leaving...",JOptionPane.YES_NO_OPTION);
+            if(result == JOptionPane.YES_OPTION)
+            {
+                out.println("RETURN_FROM_LOBBY");
+                client.closeGame();
+            }
+
+        }
+    }
+/*
     public static void main(String[] args) {
         JFrame f = new JFrame("Game");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -307,7 +329,7 @@ public class GameFrame extends JPanel implements MouseListener{
         f.add(game);
         f.setSize(1100,620);
         f.setVisible(true);
-    }
+    }*/
 }
 
 
