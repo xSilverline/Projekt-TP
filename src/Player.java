@@ -163,9 +163,12 @@ public class Player extends Thread {
                     {
                         if(l.getId() == lobbyId)
                         {
-                            if (l.areReady())
+                            if (l.areReady() && l.getNumberOfPlayers() == l.getGameType())
                             {
-                                out.println("START_GAME");
+                                for(Player p: l.players)
+                                {
+                                    p.out.println("START_GAME"+l.getGameType());
+                                }
                             }
                             else
                             {

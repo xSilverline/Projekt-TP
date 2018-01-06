@@ -317,6 +317,8 @@ public class GameFrame extends JPanel implements MouseListener,ActionListener{
             {
                 out.println("RETURN_FROM_LOBBY");
                 client.closeGame();
+
+                //TODO: add bot in the place of player
             }
 
         }

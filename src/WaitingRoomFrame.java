@@ -124,6 +124,11 @@ public class WaitingRoomFrame extends NewWindowFrame
         waitingRoomFrame.dispose();
     }
 
+    void showWaitMessage()
+    {
+        JOptionPane.showMessageDialog(null,"Waiting for other players!\n When everybody ready, game starts!","Please Wait a while...",JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();

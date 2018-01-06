@@ -55,9 +55,9 @@ public class Client{
         setGui = new SetGui(this);
     }
 
-    private void createGame()
+    private void createGame(int k)
     {
-        gameRunFrame = new GameRunFrame(6,this,out);
+        gameRunFrame = new GameRunFrame(k,this,out);
         //TODO: Give type to gameframe from server
     }
 
@@ -150,8 +150,11 @@ public class Client{
                 else if (response.startsWith("START_GAME"))
                 {
                     waitingRoomFrame.closeWindow();
-                    createGame();
-
+                    createGame(Integer.parseInt(response.substring(10)));
+                }
+                else if(response.startsWith("WAIT_FOR_PLAYERS"))
+                {
+                    waitingRoomFrame.showWaitMessage();
                 }
                 else if(response.startsWith("NULL_LOBBY_SIZE"))
                 {
