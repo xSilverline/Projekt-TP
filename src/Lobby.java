@@ -21,6 +21,24 @@ public class Lobby
         return numberOfPlayers;
     }
 
+    public boolean areReady()
+    {
+        int count = 0;
+        for(Player p : players)
+        {
+            if(p.returnReady())
+            {
+                count++;
+            }
+        }
+        if(count == getNumberOfPlayers())
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
     public boolean isFree()
     {
         if(players.size() < gameType)

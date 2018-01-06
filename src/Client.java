@@ -8,6 +8,10 @@ public class Client{
     private SetGui setGui;
     private boolean connected=false;
     static private WaitingRoomObserver waitingRoomObserver;
+    private WaitingRoomFrame waitingRoomFrame;
+    private ChooseGameFrame chooseGameFrame;
+    private ChooseLobby chooseLobby;
+    private GameFrame gameFrame;
 
 
     private Socket socket;
@@ -25,13 +29,40 @@ public class Client{
     public Client() throws Exception
     {
         // Layout GUI
-        setGui = new SetGui(this,out,in);
+        makeGui();
         setGui.setButtonsDisabled();
         waitingRoomObserver = new WaitingRoomObserver();
     }
 
+    void setWaitingRoomFrame(int k)
+    {
+        waitingRoomFrame = new WaitingRoomFrame(k,in,out,this);
+    }
 
-    public void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
+    void setChooseGameFrame()
+    {
+        chooseGameFrame = new ChooseGameFrame(in,out,this);
+    }
+
+    void setChooseLobby()
+    {
+        chooseLobby = new ChooseLobby(in,out,this);
+    }
+
+    void makeGui()
+    {
+        setGui = new SetGui(this,out,in);
+    }
+
+    private void createGame()
+    {
+        gameFrame = new GameFrame(2);
+
+        //TODO: Give type to gameframe from server
+    }
+
+
+    void setWaitingRoomObserver(WaitingRoomFrame waitingRoomFrame)
     {
         waitingRoomObserver.setSubject(waitingRoomFrame);
     }
@@ -117,8 +148,14 @@ public class Client{
                     setGui.messageLabel.setText(response.substring(8));
                 } else if (response.startsWith("PLAYER_REFRESH"))
                 {
-                    waitingRoomObserver.update();
+                    waitingRoomFrame.getList();
                     System.out.println("UP");
+                }
+                else if (response.startsWith("START_GAME"))
+                {
+                    waitingRoomFrame.closeWindow();
+                    createGame();
+
                 }
             }
             out.println("QUIT");

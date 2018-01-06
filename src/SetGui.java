@@ -26,7 +26,6 @@ public class SetGui implements ActionListener {
         this.in = in;
 
         makeGui();
-
     }
 
     private void makeGui()
@@ -128,11 +127,11 @@ public class SetGui implements ActionListener {
         } else if (source == newGameButton)
         {
             frame.dispose();
-            new ChooseGameFrame(in,out,client);
+            client.setChooseGameFrame();
         } else if (source == joinGameButton)
         {
              frame.dispose();
-             new ChooseLobby(in,out,client);
+             client.setChooseLobby();
         }
     }
 }

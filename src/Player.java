@@ -21,6 +21,7 @@ public class Player extends Thread {
     private PrintWriter out;
     private int gameType=0;
     private int lobbyId;
+    private boolean isReady;
 
     /**
      * Constructs a handler thread for a given socket and mark
@@ -30,6 +31,7 @@ public class Player extends Thread {
     public Player(Socket socket, int playerId) {
         this.socket = socket;
         this.playerId = playerId;
+        isReady=false;
     }
 
     public void currentOpponent() {
@@ -44,6 +46,11 @@ public class Player extends Thread {
          * TODO: If game has winner:
          *          output.println("DEFEAT");
          */
+    }
+
+    public boolean returnReady()
+    {
+        return isReady;
     }
 
     private void checkLobby()
@@ -148,6 +155,39 @@ public class Player extends Thread {
 
                     checkLobby();
 
+                }
+                else if(command.startsWith("READY_PLAYER"))
+                {
+                    isReady = true;
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+                            if (l.areReady())
+                            {
+                                out.println("START_GAME");
+                            }
+                            else
+                            {
+                                out.println("WAIT_FOR_PLAYERS");
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if(command.startsWith("NOT_READY_PLAYER"))
+                {
+                    isReady = false;
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+
+
+
+                            break;
+                        }
+                    }
                 }
                 else if(command.startsWith("GET_LOBBY_INFO"))
                 {

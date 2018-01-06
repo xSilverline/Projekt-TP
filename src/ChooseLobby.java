@@ -113,6 +113,12 @@ public class ChooseLobby extends NewWindowFrame
 
     }
 
+    @Override
+    void closeWindow()
+    {
+        chooseLobbyFrame.dispose();
+    }
+
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();
@@ -120,7 +126,7 @@ public class ChooseLobby extends NewWindowFrame
         {
             out.println("RETURN");
             chooseLobbyFrame.dispose();
-            new SetGui(client,out,in);
+            client.makeGui();
         }
         else if (source == joinButton)
          {
@@ -134,7 +140,8 @@ public class ChooseLobby extends NewWindowFrame
                     if(l.getGameType()>l.getWrittenNumberOfPlayers())
                     {
                         out.println("JOIN_TO"+tempId);
-                        new WaitingRoomFrame(l.getGameType(),in,out,client);
+                        client.setWaitingRoomFrame(l.getGameType());
+                        //new WaitingRoomFrame(l.getGameType(),in,out,client);
                         chooseLobbyFrame.dispose();
                     }
                     else

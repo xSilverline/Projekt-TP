@@ -28,13 +28,10 @@ public class SetupWindow extends JDialog
         hostField.setText("localhost");
         playerField.setText("player");
 
-        acceptButton.addActionListener ( new ActionListener()
-        {
-            public void actionPerformed( ActionEvent e ) {
-                dispose();
-                Client.playerName = playerField.getText();
-                Client.hostName = hostField.getText();
-            }
+        acceptButton.addActionListener (e -> {
+            dispose();
+            Client.playerName = playerField.getText();
+            Client.hostName = hostField.getText();
         });
 
         add( new JLabel ("Set your host and player name:"));

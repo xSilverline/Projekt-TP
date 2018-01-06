@@ -81,34 +81,44 @@ public class ChooseGameFrame extends NewWindowFrame {
 
     }
 
+    @Override
+    void closeWindow()
+    {
+        chooseGameFrame.dispose();
+    }
+
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();
         if (source == twoPlayerButton) {
             out.println("NEW_GAME_TYPE" + 2);
             chooseGameFrame.dispose();
-            new WaitingRoomFrame(2,in,out,client);
+            client.setWaitingRoomFrame(2);
+            //new WaitingRoomFrame(2,in,out,client);
 
         } else if (source == threePlayerButton) {
             out.println("NEW_GAME_TYPE" + 3);
             chooseGameFrame.dispose();
-            new WaitingRoomFrame(3,in,out,client);
+            client.setWaitingRoomFrame(3);
+            //new WaitingRoomFrame(3,in,out,client);
 
         } else if (source == fourPlayerButton) {
             out.println("NEW_GAME_TYPE" + 4);
             chooseGameFrame.dispose();
-            new WaitingRoomFrame(4,in,out,client);
+            client.setWaitingRoomFrame(4);
+            //new WaitingRoomFrame(4,in,out,client);
 
         } else if (source == sixPlayerButton) {
             out.println("NEW_GAME_TYPE" + 6);
             chooseGameFrame.dispose();
-            new WaitingRoomFrame(6,in,out,client);
+            client.setWaitingRoomFrame(6);
+           // new WaitingRoomFrame(6,in,out,client);
 
         } else if (source == returnButton)
         {
             out.println("RETURN");
             chooseGameFrame.dispose();
-            new SetGui(client,out,in);
+            client.makeGui();
         }
     }
 }

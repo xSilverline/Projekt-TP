@@ -21,6 +21,7 @@ public class WaitingRoomFrame extends NewWindowFrame
     private ArrayList<JLabel> playerLabels = new ArrayList<>();
     private BufferedReader in;
     private int size;
+    private boolean readyPlayer;
 
     private JList pList;
     private DefaultListModel<String> list = new DefaultListModel<>();
@@ -39,6 +40,7 @@ public class WaitingRoomFrame extends NewWindowFrame
 
         makeGui();
         getList();
+        readyPlayer = false;
 
         this.client.setWaitingRoomObserver(this);
         //refreshPlayers();
@@ -61,6 +63,10 @@ public class WaitingRoomFrame extends NewWindowFrame
         waitingRoomFrame.getContentPane().setBackground(new Color(74, 73, 75));
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
+        runButton = new JButton("Ready");
+        waitingRoomFrame.add(runButton);
+        runButton.setBounds(1200,200,150,50);
+        runButton.setBackground(Color.GREEN);
         returnButton = new JButton("Return");
         waitingRoomFrame.add(returnButton);
         returnButton.setBounds(1200,700,150,50);
@@ -75,6 +81,7 @@ public class WaitingRoomFrame extends NewWindowFrame
         waitingRoomFrame.add(pList);
         pList.setBounds(30,184,766,400);
 
+        runButton.addActionListener(this);
         returnButton.addActionListener(this);
         refreshButton.addActionListener(this);
         waitingRoomFrame.setVisible(true);
@@ -127,6 +134,12 @@ public class WaitingRoomFrame extends NewWindowFrame
             pList.setModel(list);
     }
 
+    @Override
+    void closeWindow()
+    {
+        waitingRoomFrame.dispose();
+    }
+
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();
@@ -135,7 +148,7 @@ public class WaitingRoomFrame extends NewWindowFrame
         {
             out.println("RETURN_FROM_LOBBY");
             waitingRoomFrame.dispose();
-            new SetGui(client,out,in);
+            client.makeGui();
         }
         else if(source == refreshButton)
         {
@@ -143,6 +156,26 @@ public class WaitingRoomFrame extends NewWindowFrame
             //new WaitingRoomFrame(size,in,out,client);
 
             getList();
+        }
+        else if(source == runButton)
+        {
+
+            if(readyPlayer)
+            {
+                out.println("NOT_READY_PLAYER");
+                runButton.setText("Ready");
+                runButton.setBackground(Color.GREEN);
+                readyPlayer = false;
+            }
+            else
+            {
+                out.println("READY_PLAYER");
+                readyPlayer = true;
+                runButton.setBackground(Color.RED);
+                runButton.setText("Leave");
+            }
+
+
         }
 
     }
