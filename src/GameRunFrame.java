@@ -1,14 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class GameRunFrame extends JFrame
 {
-    private GameFrame gameFrame;
+    private GamePanel gameFrame;
 
-    GameRunFrame(int size, Client client, PrintWriter out)
+    GameRunFrame(int size, Client client, PrintWriter out,ArrayList<String> playerList)
     {
-        gameFrame = new GameFrame(size,client,out);
+        gameFrame = new GamePanel(size,client,out,playerList);
         add(gameFrame);
         setSize(1366, 768);
         setUndecorated(true);

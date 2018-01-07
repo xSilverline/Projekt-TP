@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.ArrayList;
 
-public class GameFrame extends JPanel implements MouseListener,ActionListener{
+public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private int PAWN_DIAMETER = 30;
 
     private ArrayList<String> playerList = new ArrayList<String>();
@@ -24,16 +24,17 @@ public class GameFrame extends JPanel implements MouseListener,ActionListener{
     private boolean ended = false;
     private String winner = "";
 
-    GameFrame(/*BufferedReader in, PrintWriter out, Client client, ArrayList<String> playerList,*/ int n,Client client,PrintWriter out) {
+    GamePanel( int n,Client client,PrintWriter out,ArrayList<String> playerList) {
         addMouseListener(this);
-        currentPlayer="Player1";
-        //this.playerList = playerList;
+
+        this.playerList = playerList;
         this.out = out;
         //this.in = in;
         this.client = client;
         this.numOfPlayers = n;
         //setResizable(false);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        currentPlayer=playerList.get(0);
         setLayout(null);
         exitButton = new JButton("EXIT");
         add(exitButton);
@@ -137,6 +138,7 @@ public class GameFrame extends JPanel implements MouseListener,ActionListener{
             posY+=20;
             g.setColor(Color.BLACK);
             String name = "PlayerName " + Integer.toString(i-1);
+            //String name = playerList.get(i-2);
             g.drawString(name, posX, posY);
             posX-=35;
             posY+=20;

@@ -21,6 +21,7 @@ public class Client{
     private PrintWriter out;
     static String playerName;
     static String hostName;
+    private ArrayList<String> playerList;
 
     /**
      * Constructs the client by connecting to a server, laying out the
@@ -57,7 +58,7 @@ public class Client{
 
     private void createGame(int k)
     {
-        gameRunFrame = new GameRunFrame(k,this,out);
+        gameRunFrame = new GameRunFrame(k,this,out,playerList);
         //TODO: Give type to gameframe from server
     }
 
@@ -186,7 +187,8 @@ public class Client{
                 {
                     int lobbyId;
                     int numOfPlayers =0;
-                    ArrayList<String> playerList = new ArrayList<>();
+                    playerList = new ArrayList<>();
+
                     try {
                         lobbyId = Integer.parseInt(in.readLine());
                         numOfPlayers = Integer.parseInt(in.readLine());
@@ -213,7 +215,7 @@ public class Client{
                     }
 
                     waitingRoomFrame.pList.setModel(waitingRoomFrame.list);
-                    playerList.clear();
+
 
                 }
             }
