@@ -8,10 +8,10 @@ public class SetGui implements ActionListener {
     JFrame frame = new JFrame();
     JLabel messageLabel = new JLabel("");
     private Client client;
-    private JButton instructionButton;
-    private JButton exitButton;
-    private JButton newGameButton;
-    private JButton joinGameButton;
+    private ButtonGui instructionButton;
+    private ButtonGui exitButton;
+    private ButtonGui newGameButton;
+    private ButtonGui joinGameButton;
 
     SetGui(Client client)
     {
@@ -32,10 +32,10 @@ public class SetGui implements ActionListener {
         JLabel logoText = new JLabel("Chinese Checkers!", SwingConstants.CENTER);
 
 
-        instructionButton = new JButton("How to play?");
-        exitButton = new JButton("Exit");
-        newGameButton = new JButton("New Game");
-        joinGameButton = new JButton("Join Game");
+        instructionButton = new ButtonGui("How to play?");
+        exitButton = new ButtonGui("Exit");
+        newGameButton = new ButtonGui("New Game");
+        joinGameButton = new ButtonGui("Join Game");
 
         logoText.setFont(logoText.getFont().deriveFont(60f));
 
@@ -49,12 +49,8 @@ public class SetGui implements ActionListener {
         //frame.setSize(dim.width/2,dim.height/2);
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
         frame.getContentPane().setBackground(new Color(74, 73, 75));
-        newGameButton.setFont(newGameButton.getFont().deriveFont(30f));
-        newGameButton.setBackground(new Color(111, 45, 49));
-        newGameButton.setForeground(Color.white);
-        joinGameButton.setFont(joinGameButton.getFont().deriveFont(30f));
-        joinGameButton.setForeground(Color.white);
-        joinGameButton.setBackground(new Color(111, 45, 49));
+
+        logoText.setForeground(new Color(111, 45, 49));
 
         //add components
         frame.add(logoText);
@@ -67,10 +63,10 @@ public class SetGui implements ActionListener {
         logoText.setBounds(350, 50, 666, 55);
 
 
-        instructionButton.setBounds(1200, 50, 150, 50);
-        exitButton.setBounds(1200,700,150,50);
-        newGameButton.setBounds(350,300,300,300);
-        joinGameButton.setBounds(716,300,300,300);
+        instructionButton.setBounds(350, 440, 666, 70);
+        exitButton.setBounds(350,510,666,70);
+        newGameButton.setBounds(350,300,666,70);
+        joinGameButton.setBounds(350,370,666,70);
 
         instructionButton.addActionListener(this);
         exitButton.addActionListener(this);

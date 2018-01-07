@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class ChooseLobby extends NewWindowFrame
 {
-    JButton joinButton;
-    private JButton returnButton;
-    private JButton refreshButton;
+    ButtonGui joinButton;
+    private ButtonGui returnButton;
+    private ButtonGui refreshButton;
     ArrayList<Lobby> lobbyListHelper = new ArrayList<>();
     private JFrame chooseLobbyFrame = new JFrame();
 
@@ -44,17 +44,17 @@ public class ChooseLobby extends NewWindowFrame
         chooseLobbyFrame.setLocation(dim.width/2-chooseLobbyFrame.getSize().width/2, dim.height/2-chooseLobbyFrame.getSize().height/2);
         chooseLobbyFrame.getContentPane().setBackground(new Color(74, 73, 75));
 
-        joinButton = new JButton("Join");
-        returnButton = new JButton("Return");
-        refreshButton = new JButton("Refresh List");
+        joinButton = new ButtonGui("Join");
+        returnButton = new ButtonGui("Return");
+        refreshButton = new ButtonGui("Refresh");
 
         chooseLobbyFrame.add(refreshButton);
         chooseLobbyFrame.add(joinButton);
         chooseLobbyFrame.add(returnButton);
 
-        joinButton.setBounds(1200,50,150,50);
-        returnButton.setBounds(1200,700,150,50);
-        refreshButton.setBounds(30,50,150,50);
+        joinButton.setBounds(583,630,200,70);
+        returnButton.setBounds(1200,30,150,50);
+        refreshButton.setBounds(16,30,150,50);
 
         returnButton.addActionListener(this);
         joinButton.addActionListener(this);
@@ -66,10 +66,12 @@ public class ChooseLobby extends NewWindowFrame
         lobbyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lobbyList.setLayoutOrientation(JList.VERTICAL);
         lobbyList.setVisibleRowCount(-1);
+        lobbyList.setFont(lobbyList.getFont().deriveFont(20f));
         JScrollPane listScroller = new JScrollPane(lobbyList);
         chooseLobbyFrame.add(listScroller);
 
-        listScroller.setBounds(30,184,766,400);
+        listScroller.setBounds(300,184,766,400);
+        lobbyList.setBackground(Color.GRAY);
     }
 
     void getList()

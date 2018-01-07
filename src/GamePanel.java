@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     //private BufferedReader in;
     private PrintWriter out;
     private Client client;
-    private JButton exitButton;
+    private ButtonGui exitButton;
     private JLabel currentName;
     private int numOfPlayers;
     private Board board;
@@ -39,9 +39,9 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         currentPlayer=playerList.get(0);
         setLayout(null);
-        exitButton = new JButton("EXIT");
+        exitButton = new ButtonGui("EXIT");
         add(exitButton);
-        exitButton.setBounds(1200,700,100,35);
+        exitButton.setBounds(1200,710,150,50);
         exitButton.addActionListener(this);
         currentName = new JLabel("CURRENT PLAYER:  "+currentPlayer);
         add(currentName);

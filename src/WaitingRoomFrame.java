@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class WaitingRoomFrame extends NewWindowFrame
 {
-    private JButton returnButton;
+    private ButtonGui returnButton;
     private JButton runButton;
-    private JButton refreshButton;
+    private ButtonGui refreshButton;
     private JFrame waitingRoomFrame;
 
     int size;
@@ -54,15 +54,17 @@ public class WaitingRoomFrame extends NewWindowFrame
         waitingRoomFrame.setLayout (null);
         runButton = new JButton("Ready");
         waitingRoomFrame.add(runButton);
-        runButton.setBounds(1200,200,150,50);
+        runButton.setBounds(533,680,300,70);
         runButton.setBackground(Color.GREEN);
-        returnButton = new JButton("Return");
+        runButton.setFont(runButton.getFont().deriveFont(30f));
+        returnButton = new ButtonGui("Return");
         waitingRoomFrame.add(returnButton);
-        returnButton.setBounds(1200,700,150,50);
+        returnButton.setBounds(1200,30,150,50);
+        runButton.setFocusPainted(false);
 
-        refreshButton = new JButton("Refresh");
+        refreshButton = new ButtonGui("Refresh");
         waitingRoomFrame.add(refreshButton);
-        refreshButton.setBounds(1200,300,150,50);
+        refreshButton.setBounds(16,30,150,50);
         pList=new JList();
         pList.setFont(pList.getFont().deriveFont(30f));
         pList.setForeground(Color.WHITE);
@@ -74,7 +76,10 @@ public class WaitingRoomFrame extends NewWindowFrame
         for(int i=0;i<size;i++)
         {
             playerLabels.add(new JLabel());
-            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
+            playerLabels.get(i).setHorizontalAlignment(SwingConstants.CENTER);
+            playerLabels.get(i).setVerticalAlignment(SwingConstants.CENTER);
+            playerLabels.get(i).setFont(playerLabels.get(i).getFont().deriveFont(20f));
+            playerLabels.get(i).setBounds (483, 30+(85*(i)), 400, 70);
             playerLabels.get(i).setBackground(Color.GRAY);
             playerLabels.get(i).setOpaque(true);
             waitingRoomFrame.add(playerLabels.get(i));
@@ -91,44 +96,7 @@ public class WaitingRoomFrame extends NewWindowFrame
 
             list = new DefaultListModel<>();
             out.println("GET_LOBBY_INFO");
-          /*  try {
-                lobbyId = Integer.parseInt(in.readLine());
-                numOfPlayers = Integer.parseInt(in.readLine());
-                if (numOfPlayers != 0) {
-                    for (int i = 0; i < numOfPlayers; i++) {
-                        playerList.add(in.readLine());
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println(numOfPlayers);
 
-            //---------------
-            String tempText;
-            for (int i = 0; i < numOfPlayers; i++) {
-                tempText = playerList.get(i);
-                list.add(i,tempText);
-
-            /*
-            playerLabels.add(new JLabel(tempText));
-            playerLabels.get(i).setBackground(Color.green);
-            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
-            playerLabels.get(i).setOpaque(true);
-            //waitingRoomFrame.add(playerLabels.get(i));
-            }
-
-            for (int i = numOfPlayers; i < size; i++) {
-                tempText = "Waiting for Player " + (i + 1) + "...";
-                list.add(i,tempText);
-           /* playerLabels.add(new JLabel(tempText));
-            playerLabels.get(i).setBackground(Color.red);
-
-            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
-            playerLabels.get(i).setOpaque(true);
-            //waitingRoomFrame.add(playerLabels.get(i));
-            }
-            pList.setModel(list);*/
     }
 
     @Override
@@ -174,9 +142,8 @@ public class WaitingRoomFrame extends NewWindowFrame
                 out.println("READY_PLAYER");
                 readyPlayer = true;
                 runButton.setBackground(Color.RED);
-                runButton.setText("Leave");
+                runButton.setText("Leave Queue");
             }
-
 
         }
 

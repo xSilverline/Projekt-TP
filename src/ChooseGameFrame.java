@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import java.io.PrintWriter;
 
 public class ChooseGameFrame extends NewWindowFrame {
-    private JButton twoPlayerButton;
-    private JButton threePlayerButton;
-    private JButton fourPlayerButton;
-    private JButton sixPlayerButton;
-    private JButton returnButton;
+    private ButtonGui twoPlayerButton;
+    private ButtonGui threePlayerButton;
+    private ButtonGui fourPlayerButton;
+    private ButtonGui sixPlayerButton;
+    private ButtonGui returnButton;
     private JFrame chooseGameFrame = new JFrame();
 
     private PrintWriter out;
@@ -37,11 +37,11 @@ public class ChooseGameFrame extends NewWindowFrame {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         chooseGameFrame.setLocation(dim.width/2-chooseGameFrame.getSize().width/2, dim.height/2-chooseGameFrame.getSize().height/2);
         chooseGameFrame.getContentPane().setBackground(new Color(74, 73, 75));
-        twoPlayerButton = new JButton("2 Players");
-        threePlayerButton = new JButton("3 Players");
-        fourPlayerButton = new JButton("4 Players");
-        sixPlayerButton = new JButton("6 Players");
-        returnButton = new JButton("Return");
+        twoPlayerButton = new ButtonGui("2 Players");
+        threePlayerButton = new ButtonGui("3 Players");
+        fourPlayerButton = new ButtonGui("4 Players");
+        sixPlayerButton = new ButtonGui("6 Players");
+        returnButton = new ButtonGui("Return");
 
         chooseGameFrame.add(twoPlayerButton);
         chooseGameFrame.add(threePlayerButton);
@@ -51,11 +51,12 @@ public class ChooseGameFrame extends NewWindowFrame {
         chooseGameFrame.add(returnButton);
 
         chooseText.setBounds(533, 50, 300, 50);
-        twoPlayerButton.setBounds(108, 250, 250, 250);
-        threePlayerButton.setBounds(408, 250, 250, 250);
-        fourPlayerButton.setBounds(708, 250, 250, 250);
-        sixPlayerButton.setBounds(1008, 250, 250, 250);
-        returnButton.setBounds(1200,700,150,50);
+        twoPlayerButton.setBounds(350, 200, 666, 70);
+        threePlayerButton.setBounds(350, 270, 666, 70);
+        fourPlayerButton.setBounds(350, 340, 666, 70);
+        sixPlayerButton.setBounds(350, 410, 666, 70);
+        returnButton.setBounds(350,480,666,70);
+
 
         twoPlayerButton.setFont(twoPlayerButton.getFont().deriveFont(30f));
         threePlayerButton.setFont(threePlayerButton.getFont().deriveFont(30f));
