@@ -3,13 +3,12 @@ import java.awt.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class GameRunFrame extends JFrame
+class GameRunFrame extends JFrame
 {
-    private GamePanel gameFrame;
 
     GameRunFrame(int size, Client client, PrintWriter out,ArrayList<String> playerList)
     {
-        gameFrame = new GamePanel(size,client,out,playerList);
+        GamePanel gameFrame = new GamePanel(size, client, out, playerList);
         add(gameFrame);
         setSize(1366, 768);
         setUndecorated(true);

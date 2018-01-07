@@ -21,9 +21,9 @@
 
 */
 
-public class Board {
-    public int BOARD_HEIGHT = 17;
-    public int BOARD_WIDTH = 25;
+class Board {
+    int BOARD_HEIGHT = 17;
+    int BOARD_WIDTH = 25;
     private int numOfPlayers;
     private int[][] type = new int[BOARD_WIDTH][BOARD_HEIGHT];
 

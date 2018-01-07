@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class WaitingRoomFrame extends NewWindowFrame
 {
@@ -14,7 +15,9 @@ public class WaitingRoomFrame extends NewWindowFrame
     private boolean readyPlayer;
 
     JList pList;
-    DefaultListModel<String> list = new DefaultListModel<>();
+    DefaultListModel<String> list;
+
+    ArrayList<JLabel> playerLabels;
 
     private PrintWriter out;
     private Client client;
@@ -59,13 +62,23 @@ public class WaitingRoomFrame extends NewWindowFrame
 
         refreshButton = new JButton("Refresh");
         waitingRoomFrame.add(refreshButton);
-        refreshButton.setBounds(1200,200,150,50);
+        refreshButton.setBounds(1200,300,150,50);
         pList=new JList();
         pList.setFont(pList.getFont().deriveFont(30f));
         pList.setForeground(Color.WHITE);
         pList.setBackground(new Color(0x585757));
         waitingRoomFrame.add(pList);
-        pList.setBounds(30,184,766,400);
+       // pList.setBounds(30,184,766,400);
+
+        playerLabels = new ArrayList<>();
+        for(int i=0;i<size;i++)
+        {
+            playerLabels.add(new JLabel());
+            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
+            playerLabels.get(i).setBackground(Color.GRAY);
+            playerLabels.get(i).setOpaque(true);
+            waitingRoomFrame.add(playerLabels.get(i));
+        }
 
         runButton.addActionListener(this);
         returnButton.addActionListener(this);
@@ -76,7 +89,7 @@ public class WaitingRoomFrame extends NewWindowFrame
     void getList()
     {
 
-            list.clear();
+            list = new DefaultListModel<>();
             out.println("GET_LOBBY_INFO");
           /*  try {
                 lobbyId = Integer.parseInt(in.readLine());

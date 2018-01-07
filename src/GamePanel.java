@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.Graphics2D;
 import java.io.PrintWriter;
-import java.util.*;
 import java.util.ArrayList;
+
+//TODO: Implement method that checks if player moved. Remember bout changing pawns. Repair colors (in 2p P2 has orange but red is shown)
+
 
 public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private int PAWN_DIAMETER = 30;
@@ -14,6 +16,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private PrintWriter out;
     private Client client;
     private JButton exitButton;
+    private JLabel currentName;
     private int numOfPlayers;
     private Board board;
     private ArrayList<Pawn> pawns = new ArrayList<>();
@@ -40,6 +43,11 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         add(exitButton);
         exitButton.setBounds(1200,700,100,35);
         exitButton.addActionListener(this);
+        currentName = new JLabel("CURRENT PLAYER:  "+currentPlayer);
+        add(currentName);
+        currentName.setBounds(486,700,400,50);
+        currentName.setFont(currentName.getFont().deriveFont(25f));
+        currentName.setForeground(new Color(0x0B5EB3));
 
         board = new Board(this.numOfPlayers);
         //addMouseMotionListener(this);
@@ -123,7 +131,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         ////////////DRAW LEFT PART
         posX = 30;
         posY = 20;
-        for(int i=2; i<=7; i++) {
+        for(int i=2; i<playerList.size()+2; i++) {
             g.setColor(Color.BLACK);
             g.fillOval(posX, posY, PAWN_DIAMETER+1, PAWN_DIAMETER+1);
             if(i == 2)g.setColor(Color.BLUE);
@@ -137,8 +145,14 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
             posX+=35;
             posY+=20;
             g.setColor(Color.BLACK);
-            String name = "PlayerName " + Integer.toString(i-1);
-            //String name = playerList.get(i-2);
+            String name;
+            if((i-2)<playerList.size())
+            {
+                name = playerList.get(i-2);
+            }
+            else
+            name = "PlayerName " + Integer.toString(i-1);
+
             g.drawString(name, posX, posY);
             posX-=35;
             posY+=20;
@@ -156,7 +170,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
             }
         }
 
-        if(this.ended == true) {
+        if(this.ended) {
             String temp = this.winner + " wygral gre.";
             g.drawString(temp, 550, 310);
         }
@@ -179,7 +193,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         int x=e.getX();
         int y=e.getY();
 
-        if(clicked==false) {
+        if(!clicked) {
             for(int i = 0; i < pawns.size(); i++) {
                 if(x>pawns.get(i).getX() && x<(pawns.get(i).getX()+PAWN_DIAMETER) && y>pawns.get(i).getY() && y<(pawns.get(i).getY()+PAWN_DIAMETER)
                         && board.getType(pawns.get(i).getBoardXpos(), pawns.get(i).getBoardYpos()) != 1) {

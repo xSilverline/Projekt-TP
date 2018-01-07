@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Pawn {
+class Pawn {
     private Color color;
     private int x;
     private int y;
@@ -8,7 +8,7 @@ public class Pawn {
     private int boardXpos;
     private int boardYpos;
 
-    Pawn() { }
+
     Pawn(int x, int y, Color color, int i, int j) {
         this.x=x;
         this.y=y;

@@ -1,5 +1,6 @@
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -59,7 +60,6 @@ public class Client{
     private void createGame(int k)
     {
         gameRunFrame = new GameRunFrame(k,this,out,playerList);
-        //TODO: Give type to gameframe from server
     }
 
     void closeGame()
@@ -206,12 +206,16 @@ public class Client{
                     String tempText;
                     for (int i = 0; i < numOfPlayers; i++) {
                         tempText = playerList.get(i);
-                        waitingRoomFrame.list.add(i,tempText);
+                        waitingRoomFrame.playerLabels.get(i).setText(tempText);
+                        waitingRoomFrame.playerLabels.get(i).setBackground(Color.GREEN);
+                        //waitingRoomFrame.list.add(i,tempText);
                     }
 
                     for (int i = numOfPlayers; i < waitingRoomFrame.size; i++) {
                         tempText = "Waiting for Player " + (i + 1) + "...";
-                        waitingRoomFrame.list.add(i, tempText);
+                        waitingRoomFrame.playerLabels.get(i).setText(tempText);
+                        waitingRoomFrame.playerLabels.get(i).setBackground(Color.ORANGE);
+                        //waitingRoomFrame.list.add(i, tempText);
                     }
 
                     waitingRoomFrame.pList.setModel(waitingRoomFrame.list);

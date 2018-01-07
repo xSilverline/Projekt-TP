@@ -65,11 +65,6 @@ public class Lobby
         }
     }
 
-    public void leaveLobby(Player player)
-    {
-        players.remove(player);
-    }
-
     int getNumberOfPlayers()
     {
         return players.size();
