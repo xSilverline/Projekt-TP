@@ -13,14 +13,14 @@ public class SetupWindow extends JDialog
     SetupWindow()
     {
         setModal(true);
+        setUndecorated(true);
         //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Setup connection");
         setLayout(null);
-
         setSize(400,200);
-        setLocation(400,300);
+        setLocationRelativeTo(null);
         JButton acceptButton = new JButton ("CONNECT");
-        getContentPane().setBackground(new Color(111, 69, 73));
+        getContentPane().setBackground(new Color(7, 113, 26));
 
         hostField = new JTextField("", 30);
 
@@ -28,26 +28,42 @@ public class SetupWindow extends JDialog
         hostField.setText("localhost");
         playerField.setText("player");
 
-        acceptButton.addActionListener ( new ActionListener()
-        {
-            public void actionPerformed( ActionEvent e ) {
-                dispose();
-                Client.playerName = playerField.getText();
-                Client.hostName = hostField.getText();
-            }
+        acceptButton.addActionListener (e -> {
+            dispose();
+            Client.playerName = playerField.getText();
+            Client.hostName = hostField.getText();
         });
-
-        add( new JLabel ("Set your host and player name:"));
+        JLabel conLab = new JLabel ("Set your host and player name:");
+        conLab.setHorizontalAlignment(SwingConstants.CENTER);
+        conLab.setVerticalAlignment(SwingConstants.CENTER);
+        conLab.setForeground(Color.WHITE);
+        JLabel hostLabel = new JLabel("HOST:");
+        JLabel playerLabel = new JLabel("NAME:");
+        add(hostLabel);
+        add(playerLabel);
+        add(conLab);
         add(hostField);
         add(playerField);
         add(acceptButton);
 
-        hostField.setBounds(100,50,200,20);
-        playerField.setBounds(100,85,200,20);
-        acceptButton.setBounds(150,120,100,40);
+        hostLabel.setForeground(Color.WHITE);
+        playerLabel.setForeground(Color.WHITE);
+
+        hostLabel.setFont(hostLabel.getFont().deriveFont(20f));
+        playerLabel.setFont(playerLabel.getFont().deriveFont(20f));
+
+        hostLabel.setBounds(40,70,70,30);
+        playerLabel.setBounds(40,110,70,30);
+        conLab.setBounds(0,0,400,40);
+        conLab.setFont(conLab.getFont().deriveFont(20f));
+        hostField.setBounds(120,70,200,30);
+        hostField.setFont(hostField.getFont().deriveFont(20f));
+        playerField.setBounds(120,110,200,30);
+        playerField.setFont(playerField.getFont().deriveFont(20f));
+        acceptButton.setBounds(100,150,200,40);
 
         setResizable(false);
-        setLocation(600,400);
+        //setLocation(600,400);
         setVisible(true);
 
     }

@@ -1,36 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
-public class ChooseLobby implements ActionListener
+public class ChooseLobby extends NewWindowFrame
 {
-    private JButton joinButton;
-    private JButton returnButton;
-    private JButton refreshButton;
-    private ArrayList<Lobby> lobbyListHelper = new ArrayList<Lobby>();
+    ButtonGui joinButton;
+    private ButtonGui returnButton;
+    private ButtonGui refreshButton;
+    ArrayList<Lobby> lobbyListHelper = new ArrayList<>();
     private JFrame chooseLobbyFrame = new JFrame();
 
     private PrintWriter out;
-    private BufferedReader in;
 
-    private JList lobbyList;
-    private DefaultListModel<String> list = new DefaultListModel<String>();
+    JList lobbyList;
+    DefaultListModel<String> list = new DefaultListModel<>();
+
 
     private Client client;
 
-    ChooseLobby(BufferedReader in, PrintWriter out, Client client)
+    ChooseLobby(PrintWriter out, Client client)
     {
-        this.in = in;
         this.client=client;
         this.out=out;
 
+        makeGui();
+        getList();
+    }
+
+    void makeGui()
+    {
         chooseLobbyFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         chooseLobbyFrame.setUndecorated(true);
 
@@ -42,17 +44,17 @@ public class ChooseLobby implements ActionListener
         chooseLobbyFrame.setLocation(dim.width/2-chooseLobbyFrame.getSize().width/2, dim.height/2-chooseLobbyFrame.getSize().height/2);
         chooseLobbyFrame.getContentPane().setBackground(new Color(74, 73, 75));
 
-        joinButton = new JButton("Join");
-        returnButton = new JButton("Return");
-        refreshButton = new JButton("Refresh List");
+        joinButton = new ButtonGui("Join");
+        returnButton = new ButtonGui("Return");
+        refreshButton = new ButtonGui("Refresh");
 
         chooseLobbyFrame.add(refreshButton);
         chooseLobbyFrame.add(joinButton);
         chooseLobbyFrame.add(returnButton);
 
-        joinButton.setBounds(1200,50,150,50);
-        returnButton.setBounds(1200,700,150,50);
-        refreshButton.setBounds(30,50,150,50);
+        joinButton.setBounds(583,630,200,70);
+        returnButton.setBounds(1200,30,150,50);
+        refreshButton.setBounds(16,30,150,50);
 
         returnButton.addActionListener(this);
         joinButton.addActionListener(this);
@@ -64,48 +66,25 @@ public class ChooseLobby implements ActionListener
         lobbyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lobbyList.setLayoutOrientation(JList.VERTICAL);
         lobbyList.setVisibleRowCount(-1);
+        lobbyList.setFont(lobbyList.getFont().deriveFont(20f));
         JScrollPane listScroller = new JScrollPane(lobbyList);
         chooseLobbyFrame.add(listScroller);
 
-        listScroller.setBounds(30,184,766,400);
-
-        getList();
+        listScroller.setBounds(300,184,766,400);
+        lobbyList.setBackground(Color.GRAY);
     }
 
-    private void getList()
+    void getList()
     {
         out.println("JOIN_GAME_GET_LOBBY");
         list.clear();
-        try {
-            int lobbySize = Integer.parseInt(in.readLine());
-            if(lobbySize != 0)
-            {
-                for(int i=0; i< lobbySize; i++)
-                {
-                    String tempId = in.readLine();
-                    String tempType = in.readLine();
-                    String tempNOP = in.readLine();
-                    Lobby tempLobby = new Lobby(Integer.parseInt(tempType),Integer.parseInt(tempId));
-                    tempLobby.setNumberOfPlayers(Integer.parseInt(tempNOP));
-                    lobbyListHelper.add(tempLobby);
-                    String temp ="Room: "+tempId+" Type: "+tempType+" Number of Players: "+tempNOP;
-                    //System.out.println(temp);
-                    list.addElement(temp);
-                    joinButton.setEnabled(true);
-                }
-            }
-            else
-            {
-                String temp = in.readLine();
-                //System.out.println(temp);
-                list.addElement(temp);
-                joinButton.setEnabled(false);
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        lobbyList.setModel(list);
 
+    }
+
+    @Override
+    void closeWindow()
+    {
+        chooseLobbyFrame.dispose();
     }
 
     public void actionPerformed(ActionEvent e)
@@ -115,7 +94,7 @@ public class ChooseLobby implements ActionListener
         {
             out.println("RETURN");
             chooseLobbyFrame.dispose();
-            SetGui setGui = new SetGui(client,out,in);
+            client.makeGui();
         }
         else if (source == joinButton)
          {
@@ -129,7 +108,8 @@ public class ChooseLobby implements ActionListener
                     if(l.getGameType()>l.getWrittenNumberOfPlayers())
                     {
                         out.println("JOIN_TO"+tempId);
-                        new WaitingRoomFrame(l.getGameType(),in,out,client);
+                        client.setWaitingRoomFrame(l.getGameType());
+                        //new WaitingRoomFrame(l.getGameType(),in,out,client);
                         chooseLobbyFrame.dispose();
                     }
                     else

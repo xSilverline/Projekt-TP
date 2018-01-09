@@ -1,48 +1,41 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-
-
-public class WaitingRoomFrame  implements ActionListener
+public class WaitingRoomFrame extends NewWindowFrame
 {
-    private JButton returnButton;
+    private ButtonGui returnButton;
     private JButton runButton;
+    private ButtonGui refreshButton;
     private JFrame waitingRoomFrame;
-    private int lobbyId;
-    private int numOfPlayers;
-    private ArrayList<String> playerList = new ArrayList<String>();
-    private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
-    private BufferedReader in;
-    private int size;
+
+    int size;
+    private boolean readyPlayer;
+
+    JList pList;
+    DefaultListModel<String> list;
+
+    ArrayList<JLabel> playerLabels;
 
     private PrintWriter out;
     private Client client;
 
-    WaitingRoomFrame(int k, BufferedReader in, PrintWriter out, Client client)
+    WaitingRoomFrame(int k, PrintWriter out, Client client)
     {
         this.size=k;
-        this.in = in;
         this.out=out;
         this.client=client;
 
         makeGui();
-        getInfo();
+        getList();
+        readyPlayer = false;
 
         //refreshPlayers();
-        new RefreshThread(this).start();
-
-
-
-
     }
-    private void makeGui()
+
+    void makeGui()
     {
         waitingRoomFrame = new JFrame();
         waitingRoomFrame.setUndecorated(true);
@@ -59,56 +52,62 @@ public class WaitingRoomFrame  implements ActionListener
         waitingRoomFrame.getContentPane().setBackground(new Color(74, 73, 75));
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
-        returnButton = new JButton("Return");
+        runButton = new JButton("Ready");
+        waitingRoomFrame.add(runButton);
+        runButton.setBounds(533,680,300,70);
+        runButton.setBackground(Color.GREEN);
+        runButton.setFont(runButton.getFont().deriveFont(30f));
+        returnButton = new ButtonGui("Return");
         waitingRoomFrame.add(returnButton);
-        returnButton.setBounds(1200,700,150,50);
+        returnButton.setBounds(1200,30,150,50);
+        runButton.setFocusPainted(false);
 
+        refreshButton = new ButtonGui("Refresh");
+        waitingRoomFrame.add(refreshButton);
+        refreshButton.setBounds(16,30,150,50);
+        pList=new JList();
+        pList.setFont(pList.getFont().deriveFont(30f));
+        pList.setForeground(Color.WHITE);
+        pList.setBackground(new Color(0x585757));
+        waitingRoomFrame.add(pList);
+       // pList.setBounds(30,184,766,400);
+
+        playerLabels = new ArrayList<>();
+        for(int i=0;i<size;i++)
+        {
+            playerLabels.add(new JLabel());
+            playerLabels.get(i).setHorizontalAlignment(SwingConstants.CENTER);
+            playerLabels.get(i).setVerticalAlignment(SwingConstants.CENTER);
+            playerLabels.get(i).setFont(playerLabels.get(i).getFont().deriveFont(20f));
+            playerLabels.get(i).setBounds (483, 30+(85*(i)), 400, 70);
+            playerLabels.get(i).setBackground(Color.GRAY);
+            playerLabels.get(i).setOpaque(true);
+            waitingRoomFrame.add(playerLabels.get(i));
+        }
+
+        runButton.addActionListener(this);
         returnButton.addActionListener(this);
+        refreshButton.addActionListener(this);
         waitingRoomFrame.setVisible(true);
     }
 
-    void getInfo()
+    void getList()
     {
-        playerList.clear();
-        out.println("GET_LOBBY_INFO");
-        try {
-            lobbyId= Integer.parseInt(in.readLine());
-            numOfPlayers = Integer.parseInt(in.readLine());
-            if(numOfPlayers !=0)
-            {
-                for(int i=0;i<numOfPlayers;i++)
-                {
-                    playerList.add(in.readLine());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        playerLabels.clear();
-        String tempText;
-        for(int i=0;i<=numOfPlayers-1;i++)
-        {
-            tempText = playerList.get(i);
-            playerLabels.add(new JLabel(tempText));
-            playerLabels.get(i).setBackground(Color.green);
-            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
-            playerLabels.get(i).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i));
-        }
+            list = new DefaultListModel<>();
+            out.println("GET_LOBBY_INFO");
 
+    }
 
-        for(int i=numOfPlayers;i<size;i++)
-        {
-            tempText = "Waiting for Player " + (i+1) + "...";
+    @Override
+    void closeWindow()
+    {
+        waitingRoomFrame.dispose();
+    }
 
-            playerLabels.add(new JLabel(tempText));
-            playerLabels.get(i).setBackground(Color.red);
-
-            playerLabels.get(i).setBounds (20, 25+(60*(i)), 185, 50);
-            playerLabels.get(i).setOpaque(true);
-            waitingRoomFrame.add(playerLabels.get(i));
-        }
+    void showWaitMessage()
+    {
+        JOptionPane.showMessageDialog(null,"Waiting for other players!\n When everybody ready, game starts!","Please Wait a while...",JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -118,9 +117,34 @@ public class WaitingRoomFrame  implements ActionListener
         if(source==returnButton)
         {
             out.println("RETURN_FROM_LOBBY");
-
             waitingRoomFrame.dispose();
-            new SetGui(client,out,in);
+            client.makeGui();
+        }
+        else if(source == refreshButton)
+        {
+
+            //new WaitingRoomFrame(size,in,out,client);
+
+            getList();
+        }
+        else if(source == runButton)
+        {
+
+            if(readyPlayer)
+            {
+                out.println("NOT_READY_PLAYER");
+                runButton.setText("Ready");
+                runButton.setBackground(Color.GREEN);
+                readyPlayer = false;
+            }
+            else
+            {
+                out.println("READY_PLAYER");
+                readyPlayer = true;
+                runButton.setBackground(Color.RED);
+                runButton.setText("Leave Queue");
+            }
+
         }
 
     }

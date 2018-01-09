@@ -10,7 +10,6 @@
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 
 public class Player extends Thread {
@@ -20,8 +19,12 @@ public class Player extends Thread {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    int gameType=0;
+    private int gameType=0;
     private int lobbyId;
+    private boolean isReady;
+    private Game game;
+
+    private String currentPlayerName;
 
     /**
      * Constructs a handler thread for a given socket and mark
@@ -31,12 +34,7 @@ public class Player extends Thread {
     public Player(Socket socket, int playerId) {
         this.socket = socket;
         this.playerId = playerId;
-    }
-
-    public void currentOpponent() {
-        /*
-         * TODO: Return opponent.
-         */
+        isReady=false;
     }
 
     public void otherPlayerMoved(int location, int playerID) {
@@ -47,7 +45,26 @@ public class Player extends Thread {
          */
     }
 
-    void checkLobby()
+    public boolean returnReady()
+    {
+        return isReady;
+    }
+
+    public void swapPawns(String message) {
+        for(Player p : Server.players) {
+            p.out.println(message);
+        }
+    }
+
+    public void win(String color) {
+        color = "END"+color;
+        for(Player p : Server.players) {
+            p.out.println(color);
+        }
+    }
+
+
+    private void checkLobby()
     {
         Lobby toRemove=null;
         for(Lobby l: Server.lobbyList)
@@ -55,6 +72,10 @@ public class Player extends Thread {
             if(l.getId() == lobbyId)
             {
                 l.players.remove(this);
+                for (Player p : l.players)
+                {
+                    p.out.println("PLAYER_REFRESH");
+                }
                 if(l.getNumberOfPlayers() == 0)
                 {
                     toRemove = l;
@@ -74,8 +95,8 @@ public class Player extends Thread {
     public void run()
     {
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new PrintWriter(socket.getOutputStream(), true);
 
 
             while (true)
@@ -104,16 +125,16 @@ public class Player extends Thread {
             while (true) {
                 String command = in.readLine();
 
-                if (command.startsWith("MOVE")) {
-                    int expectPosition = Integer.parseInt(command.substring(5));
-                    /*
-                     * TODO: - if move is legal
-                     *            - if game has winner
-                     *                  - output.println("VICTORY");
-                     *       - else
-                     *            - output.println("MESSAGE Illegal move!");
-                     *
-                     */
+                if (command.startsWith("MOVE")) { // MOVE XX YY XX YY
+                    int pX = Integer.parseInt(command.substring(5,7));
+                    int pY = Integer.parseInt(command.substring(8,10));
+                    int toX = Integer.parseInt(command.substring(11,13));
+                    int toY = Integer.parseInt(command.substring(14,16));
+                    game.move(pX, pY, toX, toY);
+                } else if (command.startsWith("SKIP_MOVE")) {
+                    for(Player p : Server.players) {
+                        p.out.println("SKIP");
+                    }
                 } else if (command.startsWith("QUIT")) {
                     return;
                 } else if (command.startsWith("JOIN_GAME_GET_LOBBY"))
@@ -121,14 +142,13 @@ public class Player extends Thread {
                     int lobbySize=Server.lobbyList.size();
                     if(lobbySize == 0)
                     {
-                        System.out.println(lobbySize);
-                        out.println(lobbySize);
-                        out.println("No games found. Create a new game");
+                        out.println("NULL_LOBBY_SIZE");
+                        //out.println("No games found. Create a new game");
                     }
 
                     else
                     {
-                        out.println(lobbySize);
+                        out.println("LOBBY_SIZE"+lobbySize);
                         for (Lobby l : Server.lobbyList)
                         {
                             out.println(l.getId());
@@ -142,10 +162,49 @@ public class Player extends Thread {
                 }
                 else if(command.startsWith("RETURN_FROM_LOBBY"))
                 {
+
                     checkLobby();
+
+                }
+                else if(command.startsWith("READY_PLAYER"))
+                {
+                    isReady = true;
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+                            if (l.areReady() && l.getNumberOfPlayers() == l.getGameType())
+                            {
+                                for(Player p: l.players)
+                                {
+                                    p.out.println("START_GAME"+l.getGameType());
+                                }
+                            }
+                            else
+                            {
+                                out.println("WAIT_FOR_PLAYERS");
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if(command.startsWith("NOT_READY_PLAYER"))
+                {
+                    isReady = false;
+                    for(Lobby l: Server.lobbyList)
+                    {
+                        if(l.getId() == lobbyId)
+                        {
+
+
+
+                            break;
+                        }
+                    }
                 }
                 else if(command.startsWith("GET_LOBBY_INFO"))
                 {
+                    out.println("ROOM_INFO");
                     out.println(lobbyId);
                     for(Lobby l: Server.lobbyList)
                     {
@@ -172,7 +231,12 @@ public class Player extends Thread {
                         {
                             if(l.isFree())
                             {
+                                for(Player p: l.players)
+                                {
+                                    p.out.println("PLAYER_REFRESH");
+                                }
                                 l.joinLobby(this);
+
                             }
                             break;
                         }
@@ -184,7 +248,6 @@ public class Player extends Thread {
                     int id;
 
                     gameType = Integer.parseInt(command.substring(13));
-                    System.out.println(gameType);
                     if(!Server.lobbyList.isEmpty())
                     {
                         id = Server.lobbyList.get(Server.lobbyList.size() - 1).getId() + 1;
@@ -196,16 +259,8 @@ public class Player extends Thread {
                     Lobby lobby = new Lobby(gameType, id);
                     lobby.joinLobby(this);
                     lobbyId = id;
-                    System.out.println(id);
 
                     Server.lobbyList.add(lobby);
-
-
-                            /*
-                             * TODO: create new game
-                             *
-                             */
-
 
                 }else if (command.startsWith("ADD_BOT")) {
                     /*
@@ -215,11 +270,13 @@ public class Player extends Thread {
                     /*
                      * TODO: remove one bot from game
                      */
+                } else if (command.startsWith("CREATE_GAME")) {
+                    int numOfPl = Integer.parseInt(command.substring(12));
+                    game = new Game(numOfPl, this);
                 }
             }
         } catch (IOException e)
         {
-            System.out.println("Player disconnected: " + e);
             checkLobby();
             Server.names.remove(playerName);
             Server.players.remove(this);
