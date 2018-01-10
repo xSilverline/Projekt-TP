@@ -67,6 +67,9 @@ class Board {
     }
 
     int getType(int i, int j) {
+        if(i<0 || j<0 || i>=25 || j>=17) {
+            return -1;
+        }
         return type[i][j];
     }
 

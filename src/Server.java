@@ -22,6 +22,11 @@ import java.util.HashSet;
     static final HashSet<String> names = new HashSet<String>();
     static ArrayList<Player> players = new ArrayList<Player>();
     static ArrayList<Lobby> lobbyList = new ArrayList<Lobby>();
+    static public Game game;
+
+    static public void game(int n, Player player) {
+        game = new Game(n,player);
+    }
 
     public static void main(String[] args) throws Exception {
 

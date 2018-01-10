@@ -21,17 +21,16 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private int numOfPlayers;
     private Board board;
     private ArrayList<Pawn> pawns = new ArrayList<>();
-
     private String currentPlayer;
-    private Color playerColor;
-
-    private Color currentColor;
+    private JFrame gameFrame;
     private boolean clicked=false;
     private int selectedPosition;
     private boolean ended = false;
     private String winner = "";
 
-    GamePanel(int n, Client client, PrintWriter out, ArrayList<String> playerList) {
+    private Color currentColor;
+
+    GamePanel( int n,Client client,PrintWriter out,ArrayList<String> playerList) {
         addMouseListener(this);
 
         this.playerList = playerList;
@@ -41,7 +40,6 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         this.numOfPlayers = n;
         //setResizable(false);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         currentPlayer=playerList.get(0);
         setLayout(null);
         exitButton = new ButtonGui("EXIT");
@@ -56,7 +54,6 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
         currentName = new JLabel("CURRENT PLAYER:  "+currentPlayer);
         add(currentName);
-
         currentName.setBounds(486,700,400,50);
         currentName.setFont(currentName.getFont().deriveFont(25f));
         currentName.setForeground(new Color(0x0B5EB3));
@@ -65,10 +62,9 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         String create_game = "CREATE_GAME " + Integer.toString(this.numOfPlayers);
         this.out.println(create_game);
 
-        if(this.numOfPlayers==4)
-            currentColor = (new Color(126,0,195));
-        else
-            currentColor = Color.BLUE;
+        //addMouseMotionListener(this);
+
+        currentColor = Color.BLUE;
 
         //SET PAWNS
         int posX=450;
@@ -108,7 +104,6 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         this.setBackground(new Color(111, 111, 111));
 
         //DRAW GAME BACKGROUND
-
         int posX=450;
         int posY=20;
         for(int i=0;i<board.BOARD_WIDTH;i++) {
@@ -155,14 +150,14 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     break;
                 case 3:
                     if (i == 2) g.setColor(Color.BLUE);
-                    if (i == 3) g.setColor(Color.GREEN);
-                    if (i == 4) g.setColor(Color.YELLOW);
+                    if (i == 4) g.setColor(Color.GREEN);
+                    if (i == 3) g.setColor(Color.YELLOW);
                     break;
                 case 4:
-                    if (i == 2) g.setColor(new Color(126, 0, 195));
-                    if (i == 3) g.setColor(Color.BLUE);
-                    if (i == 4) g.setColor(Color.YELLOW);
-                    if (i == 5) g.setColor(Color.RED);
+                    if (i == 5) g.setColor(new Color(126, 0, 195));
+                    if (i == 2) g.setColor(Color.BLUE);
+                    if (i == 3) g.setColor(Color.YELLOW);
+                    if (i == 4) g.setColor(Color.RED);
                     break;
                 case 6:
                     if (i == 2) g.setColor(Color.BLUE);
@@ -185,7 +180,6 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
             if( this.client.getPlayerName().equals(playerList.get(i-2)) ) {
                 name += "me: ";
-                playerColor=g.getColor();
             }
 
             if((i-2)<playerList.size())
@@ -256,7 +250,6 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
                             moveTo(pawns.get(selectedPosition).getBoardXpos(), pawns.get(selectedPosition).getBoardYpos(),
                                     pawns.get(i).getBoardXpos(), pawns.get(i).getBoardYpos());
-
                         }
                     }
                     if (pawns.get(i).ifSelected()) {
@@ -382,7 +375,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     }
 
     void endGame(String winner) {
-        winner+="HAS WON THE GAME!";
+        winner+=" HAS WON THE GAME!";
         int n = JOptionPane.showConfirmDialog(this,"exit?", winner, JOptionPane.YES_NO_OPTION);
     }
 

@@ -70,7 +70,7 @@ public class WaitingRoomFrame extends NewWindowFrame
         pList.setForeground(Color.WHITE);
         pList.setBackground(new Color(0x585757));
         waitingRoomFrame.add(pList);
-       // pList.setBounds(30,184,766,400);
+        // pList.setBounds(30,184,766,400);
 
         playerLabels = new ArrayList<>();
         for(int i=0;i<size;i++)
@@ -94,8 +94,8 @@ public class WaitingRoomFrame extends NewWindowFrame
     void getList()
     {
 
-            list = new DefaultListModel<>();
-            out.println("GET_LOBBY_INFO");
+        list = new DefaultListModel<>();
+        out.println("GET_LOBBY_INFO");
 
     }
 

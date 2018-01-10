@@ -120,15 +120,18 @@ public class Client{
                 } else if (response.startsWith("SKIP")) {
                     gameRunFrame.next();
                 } else if (response.startsWith("END")) {
-                    String winner = response.substring(4);
+                    String winner = response.substring(3);
                     gameRunFrame.end(winner);
                     break;
+                }
+
+                if (response.startsWith("VALID_MOVE")) {
+                    setGui.messageLabel.setText("Valid move, wait for next turn.");
                 } else if (response.startsWith("MESSAGE")) {
                     setGui.messageLabel.setText(response.substring(8));
                 } else if (response.startsWith("PLAYER_REFRESH"))
                 {
                     waitingRoomFrame.getList();
-
                 }
                 else if (response.startsWith("START_GAME"))
                 {
@@ -180,7 +183,6 @@ public class Client{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     //---------------
                     String tempText;
                     for (int i = 0; i < numOfPlayers; i++) {
@@ -198,11 +200,10 @@ public class Client{
                     }
 
                     waitingRoomFrame.pList.setModel(waitingRoomFrame.list);
-
-
                 }
             }
             out.println("QUIT");
+
         } finally {
             socket.close();
         }

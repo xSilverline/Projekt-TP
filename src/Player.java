@@ -37,13 +37,6 @@ public class Player extends Thread {
         isReady=false;
     }
 
-    public void otherPlayerMoved(int location, int playerID) {
-        out.println("OPPONENT_MOVED " + playerID + location);
-        /*
-         * TODO: If game has winner:
-         *          output.println("DEFEAT");
-         */
-    }
 
     public boolean returnReady()
     {
@@ -62,7 +55,6 @@ public class Player extends Thread {
             p.out.println(color);
         }
     }
-
 
     private void checkLobby()
     {
@@ -130,7 +122,7 @@ public class Player extends Thread {
                     int pY = Integer.parseInt(command.substring(8,10));
                     int toX = Integer.parseInt(command.substring(11,13));
                     int toY = Integer.parseInt(command.substring(14,16));
-                    game.move(pX, pY, toX, toY);
+                    Server.game.move(pX, pY, toX, toY);
                 } else if (command.startsWith("SKIP_MOVE")) {
                     for(Player p : Server.players) {
                         p.out.println("SKIP");
@@ -272,7 +264,7 @@ public class Player extends Thread {
                      */
                 } else if (command.startsWith("CREATE_GAME")) {
                     int numOfPl = Integer.parseInt(command.substring(12));
-                    game = new Game(numOfPl, this);
+                    Server.game(numOfPl, this);
                 }
             }
         } catch (IOException e)
@@ -280,6 +272,7 @@ public class Player extends Thread {
             checkLobby();
             Server.names.remove(playerName);
             Server.players.remove(this);
+            System.out.println("Player disconnected: " + e);
         } finally {
             try {
                 socket.close();
