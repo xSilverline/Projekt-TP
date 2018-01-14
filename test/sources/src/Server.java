@@ -1,4 +1,4 @@
-package sources;
+package sources.src;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -20,33 +20,26 @@ public class Server {
 /**
  * Runs the server.
  */
-static HashSet<String> names = new HashSet<String>();
-//static ArrayList<PlayerStatus> playerInfo = new ArrayList<PlayerStatus>();
+static final HashSet<String> names = new HashSet<String>();
 static ArrayList<Player> players = new ArrayList<Player>();
+static ArrayList<Lobby> lobbyList = new ArrayList<Lobby>();
+static public Game game;
+
+static public void game(int n, Player player) {
+    game = new Game(n,player);
+}
 
 public static void main(String[] args) throws Exception {
+
     ServerSocket listener = new ServerSocket(9090);
     System.out.println("Server is running");
+
     int id=0;
 
     try {
         while(true) {
-            if(id<6) {
-                players.add(new Player(listener.accept(), id));
-                if(id!=0 && id!=4) {
-                    for(int i=0;i<=id;i++){
-                        if(players.get(i).gameType!=(id+1)) {
-                            break;
-                        }
-                        if(i==id){
-                            Game game = new Game(id+1);
-                        }
-                    }
-                }
+                new Player(listener.accept(),id).start();
                 id++;
-            }else {
-                System.out.println("No room");
-            }
         }
     } finally {
         listener.close();

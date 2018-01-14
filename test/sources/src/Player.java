@@ -1,4 +1,4 @@
-/**
+package sources.src; /**
  * The class for the helper threads in this multithreaded server
  * application.  A Player is identified by a playerName.
  * For communication with the
@@ -8,7 +8,10 @@
  */
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 
@@ -131,7 +134,7 @@ public class Player extends Thread {
                     return;
                 } else if (command.startsWith("JOIN_GAME_GET_LOBBY"))
                 {
-                    int lobbySize=Server.lobbyList.size();
+                    int lobbySize= Server.lobbyList.size();
                     if(lobbySize == 0)
                     {
                         out.println("NULL_LOBBY_SIZE");

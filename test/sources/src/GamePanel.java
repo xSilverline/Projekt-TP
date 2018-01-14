@@ -1,7 +1,11 @@
+package sources.src;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -30,7 +34,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
     private Color currentColor;
 
-    GamePanel( int n,Client client,PrintWriter out,ArrayList<String> playerList) {
+    GamePanel(int n, Client client, PrintWriter out, ArrayList<String> playerList) {
         addMouseListener(this);
 
         this.playerList = playerList;

@@ -1,9 +1,10 @@
+package sources.src;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
