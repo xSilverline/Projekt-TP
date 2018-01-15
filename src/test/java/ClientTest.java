@@ -1,28 +1,24 @@
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-//import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 public class ClientTest
 {
-    private Server server;
-    private Client client;
+
+    Client client;
     @Before
-    public void setUp() throws Exception
+    void setUpClient() throws Exception
     {
         client = new Client();
     }
 
     @Test
-    public void IsPlayerNameOkay()
+    void ShouldReturnPlayerProperly()
     {
         Client.playerName = "player";
         assertEquals("player",client.getPlayerName());
     }
-
-
 
 
 }
