@@ -2,7 +2,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ClientTest
 {
@@ -20,6 +21,8 @@ public class ClientTest
         Client.playerName = "player";
         assertEquals("player",client.getPlayerName());
     }
+
+
 
 
 }

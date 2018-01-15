@@ -12,13 +12,13 @@ import java.io.*;
 import java.net.Socket;
 
 
-public class Player extends Thread {
+public class PlayerThread extends Thread {
 
     private String playerName;
     private int playerId;
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private String in;
+    private String out;
     private int gameType=0;
     private int lobbyId;
     private boolean isReady;
@@ -31,8 +31,9 @@ public class Player extends Thread {
      * initializes the stream fields, displays the first two
      * welcoming messages.
      */
-    Player(Socket socket, int playerId) {
-        this.socket = socket;
+    PlayerThread(int playerId)
+    {
+
         this.playerId = playerId;
         isReady=false;
     }
@@ -44,29 +45,29 @@ public class Player extends Thread {
     }
 
     void swapPawns(String message) {
-        for(Player p : Server.players) {
-            p.out.println(message);
+        for(PlayerThread p : ServerTestClass.players) {
+            p.out = message ;
         }
     }
 
     void win(String color) {
         color = "END"+color;
-        for(Player p : Server.players) {
-            p.out.println(color);
+        for(PlayerThread p : ServerTestClass.players) {
+            p.out =color;
         }
     }
 
     private void checkLobby()
     {
-        Lobby toRemove=null;
-        for(Lobby l: Server.lobbyList)
+        LobbyTestClass toRemove=null;
+        for(LobbyTestClass l: ServerTestClass.lobbyList)
         {
             if(l.getId() == lobbyId)
             {
                 l.players.remove(this);
-                for (Player p : l.players)
+                for (PlayerThread p : l.players)
                 {
-                    p.out.println("PLAYER_REFRESH");
+                    p.out ="PLAYER_REFRESH";
                 }
                 if(l.getNumberOfPlayers() == 0)
                 {
@@ -77,75 +78,106 @@ public class Player extends Thread {
         }
         if(toRemove != null)
         {
-            Server.lobbyList.remove(toRemove);
+            ServerTestClass.lobbyList.remove(toRemove);
+        }
+    }
+
+    public void setOut(String message)
+    {
+        in = message;
+    }
+
+    public String retOut()
+    {
+        return out;
+    }
+
+    public void newPlayer()
+    {
+        out="SUBMITNAME";
+        playerName = in;
+        if (playerName == null)
+        {
+            out = "INVALID_NAME";
+        }
+        else
+            {
+                if (!ServerTestClass.names.contains(playerName)) {
+                    ServerTestClass.names.add(playerName);
+                    out="NAMEACCEPTED";
+                    ServerTestClass.players.add(this);
+
+                }
+                else
+                {
+                    out= "INVALID_NAME";
+                }
+            }
+
+
+
+    }
+
+    void getLobbySize()
+    {
+        int lobbySize=ServerTestClass.lobbyList.size();
+        if(lobbySize == 0)
+        {
+            out="NULL_LOBBY_SIZE";
+            //out.println("No games found. Create a new game");
+
+        }
+
+        else
+        {
+            out="LOBBY_SIZE"+lobbySize;
+
         }
     }
 
     /**
      * The run method of this thread.
      */
-    public void run()
-    {
-        try {
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new PrintWriter(socket.getOutputStream(), true);
 
+
+/*
 
             while (true)
             {
-                out.println("SUBMITNAME");
-                playerName = in.readLine();
-                if (playerName == null)
-                {
-                    out.println("INVALID_NAME");
-                }
-                else {
-                    synchronized (Server.names) {
-                        if (!Server.names.contains(playerName)) {
-                            Server.names.add(playerName);
-                            break;
-                        } else {
-                            out.println("INVALID_NAME");
 
-                        }
-                    }
-                }
-            }
-            out.println("NAMEACCEPTED");
-            Server.players.add(this);
+*/
+            void runThread(String command) {
 
-            while (true) {
-                String command = in.readLine();
 
                 if (command.startsWith("MOVE")) { // MOVE XX YY XX YY
                     int pX = Integer.parseInt(command.substring(5,7));
                     int pY = Integer.parseInt(command.substring(8,10));
                     int toX = Integer.parseInt(command.substring(11,13));
                     int toY = Integer.parseInt(command.substring(14,16));
-                    Server.game.move(pX, pY, toX, toY);
+                    ServerTestClass.game.move(pX, pY, toX, toY);
                 } else if (command.startsWith("SKIP_MOVE")) {
-                    for(Player p : Server.players) {
-                        p.out.println("SKIP");
+                    for(PlayerThread p : ServerTestClass.players) {
+                        p.out="SKIP";
                     }
                 } else if (command.startsWith("QUIT")) {
                     return;
                 } else if (command.startsWith("JOIN_GAME_GET_LOBBY"))
                 {
-                    int lobbySize=Server.lobbyList.size();
+                    int lobbySize=ServerTestClass.lobbyList.size();
                     if(lobbySize == 0)
                     {
-                        out.println("NULL_LOBBY_SIZE");
+                        out="NULL_LOBBY_SIZE";
                         //out.println("No games found. Create a new game");
                     }
 
                     else
                     {
-                        out.println("LOBBY_SIZE"+lobbySize);
-                        for (Lobby l : Server.lobbyList)
+                        out="LOBBY_SIZE"+lobbySize;
+                        for (LobbyTestClass l : ServerTestClass.lobbyList)
                         {
-                            out.println(l.getId());
-                            out.println(l.getGameType());
-                            out.println(l.getNumberOfPlayers());
+                            out = Integer.toString(l.getId());
+                            out= Integer.toString(l.getGameType());
+                            out= Integer.toString(l.getNumberOfPlayers());
                         }
 
                     }
@@ -156,36 +188,36 @@ public class Player extends Thread {
                 {
 
                     checkLobby();
-                    for(Player p: Server.players)
+                    for(PlayerThread p: ServerTestClass.players)
                     {
                         if(p != this)
-                        p.out.println("LOBBY_REFRESH");
+                            p.out = "LOBBY_REFRESH";
                     }
 
                 }
                 else if(command.startsWith("READY_PLAYER"))
                 {
                     isReady = true;
-                    for(Lobby l: Server.lobbyList)
+                    for(LobbyTestClass l: ServerTestClass.lobbyList)
                     {
                         if(l.getId() == lobbyId)
                         {
                             if (l.areReady() && l.getNumberOfPlayers() == l.getGameType())
                             {
-                                for(Player p: l.players)
+                                for(PlayerThread p: l.players)
                                 {
-                                    p.out.println("START_GAME"+l.getGameType());
+                                    p.out = "START_GAME"+l.getGameType();
                                 }
-                                Server.lobbyList.remove(l);
-                                for(Player p: Server.players)
+                                ServerTestClass.lobbyList.remove(l);
+                                for(PlayerThread p: ServerTest.players)
                                 {
                                     if(p != this)
-                                    p.out.println("LOBBY_REFRESH");
+                                        p.out="LOBBY_REFRESH";
                                 }
                             }
                             else
                             {
-                                out.println("WAIT_FOR_PLAYERS");
+                                out="WAIT_FOR_PLAYERS";
                             }
                             break;
                         }
@@ -194,12 +226,10 @@ public class Player extends Thread {
                 else if(command.startsWith("NOT_READY_PLAYER"))
                 {
                     isReady = false;
-                    for(Lobby l: Server.lobbyList)
+                    for(LobbyTestClass l: ServerTestClass.lobbyList)
                     {
                         if(l.getId() == lobbyId)
                         {
-
-
 
                             break;
                         }
@@ -207,18 +237,18 @@ public class Player extends Thread {
                 }
                 else if(command.startsWith("GET_LOBBY_INFO"))
                 {
-                    out.println("ROOM_INFO");
-                    out.println(lobbyId);
-                    for(Lobby l: Server.lobbyList)
+                    out="ROOM_INFO";
+                    out= Integer.toString(lobbyId);
+                    for(LobbyTestClass l: ServerTestClass.lobbyList)
                     {
                         if(l.getId() == lobbyId)
                         {
-                            out.println(l.getNumberOfPlayers());
+                            out= Integer.toString(l.getNumberOfPlayers());
                             if (l.getNumberOfPlayers() != 0)
                             {
-                                for (Player p : l.players)
+                                for (PlayerThread p : l.players)
                                 {
-                                    out.println(p.playerName);
+                                    out= p.playerName;
                                 }
                                 break;
                             }
@@ -228,21 +258,21 @@ public class Player extends Thread {
                 else if(command.startsWith("JOIN_TO"))
                 {
                     lobbyId= Integer.parseInt(command.substring(7));
-                    for (Lobby l : Server.lobbyList)
+                    for (LobbyTestClass l : ServerTestClass.lobbyList)
                     {
                         if(l.getId() == lobbyId)
                         {
                             if(l.isFree())
                             {
-                                for(Player p: l.players)
+                                for(PlayerThread p: l.players)
                                 {
-                                    p.out.println("PLAYER_REFRESH");
+                                    p.out="PLAYER_REFRESH";
                                 }
                                 l.joinLobby(this);
-                                for(Player p: Server.players)
+                                for(PlayerThread p: ServerTestClass.players)
                                 {
                                     if(p != this)
-                                    p.out.println("LOBBY_REFRESH");
+                                        p.out ="LOBBY_REFRESH";
                                 }
 
                             }
@@ -256,24 +286,24 @@ public class Player extends Thread {
                     int id;
 
                     gameType = Integer.parseInt(command.substring(13));
-                    if(!Server.lobbyList.isEmpty())
+                    if(!ServerTestClass.lobbyList.isEmpty())
                     {
-                        id = Server.lobbyList.get(Server.lobbyList.size() - 1).getId() + 1;
+                        id = ServerTestClass.lobbyList.get(ServerTestClass.lobbyList.size() - 1).getId() + 1;
                     }
                     else
-                        {
+                    {
                         id = 1;
                     }
-                    Lobby lobby = new Lobby(gameType, id);
+                    LobbyTestClass lobby = new LobbyTestClass(gameType, id);
                     lobby.joinLobby(this);
                     lobbyId = id;
 
-                    Server.lobbyList.add(lobby);
+                    ServerTestClass.lobbyList.add(lobby);
 
-                    for(Player p: Server.players)
+                    for(PlayerThread p: ServerTestClass.players)
                     {
                         if(p != this)
-                        p.out.println("LOBBY_REFRESH");
+                            p.out ="LOBBY_REFRESH";
                     }
 
                 }else if (command.startsWith("ADD_BOT")) {
@@ -286,20 +316,7 @@ public class Player extends Thread {
                      */
                 } else if (command.startsWith("CREATE_GAME")) {
                     int numOfPl = Integer.parseInt(command.substring(12));
-                    Server.game(numOfPl, this);
+                    ServerTestClass.game(numOfPl, this);
                 }
             }
-        } catch (IOException e)
-        {
-            checkLobby();
-            Server.names.remove(playerName);
-            Server.players.remove(this);
-            System.out.println("Player disconnected: " + e);
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-            }
-        }
-    }
 }

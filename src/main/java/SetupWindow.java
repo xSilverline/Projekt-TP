@@ -6,7 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
-public class SetupWindow extends JDialog
+class SetupWindow extends JDialog
 {
     private JTextField hostField;
     private JTextField playerField;
