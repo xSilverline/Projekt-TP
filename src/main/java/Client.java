@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Client
 {
-
     private SetGui setGui;
     private boolean connected = false;
 

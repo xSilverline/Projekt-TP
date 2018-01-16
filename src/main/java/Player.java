@@ -9,6 +9,7 @@
 
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 
@@ -277,13 +278,27 @@ public class Player extends Thread {
                     }
 
                 }else if (command.startsWith("ADD_BOT")) {
-                    /*
-                     * TODO: add one bot to game
-                     */
-                } else if (command.startsWith("REMOVE_BOT")) {
-                    /*
-                     * TODO: remove one bot from game
-                     */
+                    System.out.println("Adding bot...");
+                    String name = "BOT";
+                    int ta = 0;
+                    for(;;) {
+                        ta++;
+                        String nametemp = name + Integer.toString(ta);
+                        if (Server.names.contains(nametemp)) continue;
+                        else {
+                            Server.names.add(playerName);
+                            break;
+                        }
+                    }
+                    Player bot = new Player(null, this.playerId+1);
+                    for (Lobby l : Server.lobbyList)
+                    {
+                        if(l.players.contains(this)) {
+                            l.joinLobby(bot);
+                            break;
+                        }
+                    }
+
                 } else if (command.startsWith("CREATE_GAME")) {
                     int numOfPl = Integer.parseInt(command.substring(12));
                     Server.game(numOfPl, this);

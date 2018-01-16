@@ -28,8 +28,7 @@ import java.util.HashSet;
         game = new Game(n,player);
     }
 
-    public static void main(String[] args) throws Exception {
-
+    static public void main(String[] args) throws Exception {
         ServerSocket listener = new ServerSocket(9090);
         System.out.println("Server is running");
 
@@ -38,7 +37,7 @@ import java.util.HashSet;
         try {
             while(true) {
                     new Player(listener.accept(),id).start();
-                    id++;
+                id++;
             }
         } finally {
             listener.close();

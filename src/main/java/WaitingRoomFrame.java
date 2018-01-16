@@ -53,6 +53,7 @@ public class WaitingRoomFrame extends NewWindowFrame
         waitingRoomFrame.setResizable(false);
         waitingRoomFrame.setLayout (null);
         runButton = new JButton("Ready");
+
         waitingRoomFrame.add(runButton);
         runButton.setBounds(533,680,300,70);
         runButton.setBackground(Color.GREEN);

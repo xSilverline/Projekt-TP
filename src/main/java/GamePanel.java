@@ -17,6 +17,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private Client client;
     private ButtonGui exitButton;
     private ButtonGui skipButton;
+    private ButtonGui botButton;
     private JLabel currentName;
     private int numOfPlayers;
     private Board board;
@@ -29,6 +30,8 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
     private String winner = "";
 
     private Color currentColor;
+
+    private Color mycolor;
 
     GamePanel( int n,Client client,PrintWriter out,ArrayList<String> playerList) {
         addMouseListener(this);
@@ -51,6 +54,12 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         add(skipButton);
         skipButton.setBounds(500,630,200,50);
         skipButton.addActionListener(this);
+
+        botButton = new ButtonGui("MOVE AS BOT");
+        add(botButton);
+        botButton.setBackground(new Color(70, 70, 255));
+        botButton.setBounds(1000,430,250,50);
+        botButton.addActionListener(this);
 
         currentName = new JLabel("CURRENT PLAYER:  "+currentPlayer);
         add(currentName);
@@ -180,6 +189,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
             if( this.client.getPlayerName().equals(playerList.get(i-2)) ) {
                 name += "me: ";
+                mycolor=g.getColor();
             }
 
             if((i-2)<playerList.size())
@@ -400,6 +410,214 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         {
             out.println("SKIP_MOVE");
         }
+
+        if (source == botButton && currentColor.equals(mycolor))
+        {
+            if(currentColor.equals(Color.BLUE)) {
+                selectBotPawn(2, 12, 16, "DOWN",16,24);
+            }
+            else if(currentColor.equals( Color.ORANGE)) {
+                selectBotPawn(3, 0, 12, "LEFT",0,0);
+            }
+            else if(currentColor.equals(Color.YELLOW)) {
+                selectBotPawn(4, 0, 4, "LEFT",0,0);
+            }
+            else if(currentColor.equals(Color.RED)) {
+                selectBotPawn(5, 12, 0, "UP",0,0);
+            }
+            else if(currentColor.equals(Color.GREEN)) {
+                selectBotPawn(6, 24, 4, "RIGHT",16,0);
+            }
+            else if(currentColor.equals(new Color(126, 0, 195))) {
+                selectBotPawn(7, 24, 12, "RIGHT",16,0);
+            }
+        }
+    }
+
+
+
+    private void moveAsBot(int x, int y, int type, int targetX, int targetY, String stCheckFrom) {
+
+        int core=-1;
+        if(stCheckFrom.equals("UP") && x>targetX) {
+            core=0;
+        } else if(stCheckFrom.equals("UP")) {
+            core=1;
+        } else if(stCheckFrom.equals("LEFT") && y>targetY) {
+            core=0;
+        } else if(stCheckFrom.equals("LEFT") && y<targetY) {
+            core=4;
+        } else if(stCheckFrom.equals("LEFT") && y==targetY) {
+            core=2;
+        } else if(stCheckFrom.equals("RIGHT") && y>targetY) {
+            core=1;
+        } else if(stCheckFrom.equals("RIGHT") && y<targetY) {
+            core=5;
+        } else if(stCheckFrom.equals("RIGHT") && y==targetY) {
+            core=3;
+        } else if(stCheckFrom.equals("DOWN") && x>targetX) {
+            core=4;
+        } else if(stCheckFrom.equals("DOWN")) {
+            core=5;
+        }
+
+        // *     0  1
+        // *   2  X  3
+        // *     4  5
+        /////////////////
+        int xt=x, yt=y;
+        switch(core) {
+            case 0:
+                if(board.getType(x-1,y-1)==1) {
+                    xt=x-1; yt=y-1;
+                } else if(board.getType(x+1,y-1)==1) {
+                    xt=x+1; yt=y-1;
+                } else if(board.getType(x-2,y)==1) {
+                    xt=x-2; yt=y;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            case 1:
+                if(board.getType(x+1,y-1)==1) {
+                    xt=x+1; yt=y-1;
+                } else if(board.getType(x-1,y-1)==1) {
+                    xt=x-1; yt=y-1;
+                } else if(board.getType(x+2,y)==1) {
+                    xt=x+2; yt=y;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            case 2:
+                if(board.getType(x-2,y)==1) {
+                    xt=x-21; yt=y;
+                } else if(board.getType(x-1,y+1)==1) {
+                    xt=x-1; yt=y+1;
+                } else if(board.getType(x-1,y-1)==1) {
+                    xt=x-1; yt=y-1;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            case 3:
+                if(board.getType(x+2,y)==1) {
+                    xt=x+2; yt=y;
+                } else if(board.getType(x+1,y+1)==1) {
+                    xt=x+1; yt=y+1;
+                } else if(board.getType(x+1,y-1)==1) {
+                    xt=x+1; yt=y-1;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            case 4:
+                if(board.getType(x-1,y+1)==1) {
+                    xt=x-1; yt=y+1;
+                } else if(board.getType(x-2,y)==1) {
+                    xt=x-2; yt=y;
+                } else if(board.getType(x+1,y+1)==1) {
+                    xt=x+1; yt=y+1;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            case 5:
+                if(board.getType(x+1,y+1)==1) {
+                    xt=x+1; yt=y+1;
+                } else if(board.getType(x-1,y+1)==1) {
+                    xt=x-1; yt=y+1;
+                } else if(board.getType(x+2,y)==1) {
+                    xt=x+2; yt=y;
+                } else {
+                    clearPawnsSelect();
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Core point fail.");
+                break;
+        }
+
+        moveTo(x , y, xt, yt);
+        clearPawnsSelect();
+        selectedPosition=-1;
+
+        repaint();
+    }
+
+    private void clearPawnsSelect() {
+        for (int i = 0; i < pawns.size(); i++) {
+            if(pawns.get(i).ifSelected()){
+                pawns.get(i).select(false);
+            }
+        }
+    }
+
+    private void selectBotPawn(int type, int targetX, int targetY, String stCheckFrom, int startX, int startY) {
+        int x=0, y=0;
+        if(stCheckFrom.equals("DOWN")) {
+            for(int i=startX; i>=0; i--) {
+                for(int j=startY; j>=0; j--) {
+                    if(board.getType(i,j)==type) {
+                        x=i;
+                        y=j;
+                        break;
+                    }
+                }
+            }
+        } else if(stCheckFrom.equals("LEFT")) {
+            for(int j=startY; j<=24; j++) {
+                for(int i=startX; i<=16; i++) {
+                    if(board.getType(i,j)==type) {
+                        x=i;
+                        y=j;
+                        break;
+                    }
+                }
+            }
+        } else if(stCheckFrom.equals("RIGHT")) {
+            for(int j=startY; j<=24; j++) {
+                for(int i=startX; i>=0; i--) {
+                    if(board.getType(i,j)==type) {
+                        x=i;
+                        y=j;
+                        break;
+                    }
+                }
+            }
+        } else if(stCheckFrom.equals("UP")) {
+            for(int i=startX; i<=16; i++) {
+                for(int j=startY; j<=24; j++) {
+                    if(board.getType(i,j)==type) {
+                        x=i;
+                        y=j;
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < pawns.size(); i++) {
+            if(pawns.get(i).getBoardXpos()==x && pawns.get(i).getBoardYpos()==y) {
+                pawns.get(i).select(true);
+                selectedPosition=i;
+                break;
+            }
+        }
+
+        moveAsBot(x, y, type, targetX, targetY, stCheckFrom);
     }
 
 }
