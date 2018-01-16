@@ -5,6 +5,7 @@ class Pawn {
     private int x;
     private int y;
     private boolean chosen=false;
+    private boolean botselect=true;
     private int boardXpos;
     private int boardYpos;
 
@@ -55,5 +56,7 @@ class Pawn {
     boolean ifSelected() {
         return this.chosen;
     }
+
+
 
 }

@@ -476,7 +476,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x-2; yt=y;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+2, y);
                     return;
                 }
                 break;
@@ -489,7 +489,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x+2; yt=y;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+2, y);
                     return;
                 }
                 break;
@@ -502,7 +502,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x-1; yt=y-1;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y+1);
                     return;
                 }
                 break;
@@ -515,7 +515,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x+1; yt=y-1;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x-1, y-11);
                     return;
                 }
                 break;
@@ -528,7 +528,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x+1; yt=y+1;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x-1, y-1);
                     return;
                 }
                 break;
@@ -541,7 +541,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                     xt=x+2; yt=y;
                 } else {
                     clearPawnsSelect();
-                    selectBotPawn(type, targetX, targetY, stCheckFrom, x+1, y);
+                    selectBotPawn(type, targetX, targetY, stCheckFrom, x-1, y-1);
                     return;
                 }
                 break;
@@ -567,10 +567,15 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
 
     private void selectBotPawn(int type, int targetX, int targetY, String stCheckFrom, int startX, int startY) {
         int x=0, y=0;
+        // *     0  1
+        // *   2  X  3
+        // *     4  5
+        /////////////////
         if(stCheckFrom.equals("DOWN")) {
             for(int i=startX; i>=0; i--) {
                 for(int j=startY; j>=0; j--) {
-                    if(board.getType(i,j)==type) {
+                    if(board.getType(i,j)==type && (board.getType(i-2,j)==1 || board.getType(i-1,j+1)==1
+                                                    || board.getType(i+1,j+1)==1)) {
                         x=i;
                         y=j;
                         break;
@@ -580,7 +585,8 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         } else if(stCheckFrom.equals("LEFT")) {
             for(int j=startY; j<=24; j++) {
                 for(int i=startX; i<=16; i++) {
-                    if(board.getType(i,j)==type) {
+                    if(board.getType(i,j)==type && (board.getType(i-1,j-1)==1 || board.getType(i-2,j)==1
+                                                    || board.getType(i-1,j+1)==1)) {
                         x=i;
                         y=j;
                         break;
@@ -590,7 +596,8 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         } else if(stCheckFrom.equals("RIGHT")) {
             for(int j=startY; j<=24; j++) {
                 for(int i=startX; i>=0; i--) {
-                    if(board.getType(i,j)==type) {
+                    if(board.getType(i,j)==type && (board.getType(i+1,j-1)==1 || board.getType(i+2,j)==1
+                                                    || board.getType(i+1,j+1)==1)) {
                         x=i;
                         y=j;
                         break;
@@ -600,7 +607,8 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
         } else if(stCheckFrom.equals("UP")) {
             for(int i=startX; i<=16; i++) {
                 for(int j=startY; j<=24; j++) {
-                    if(board.getType(i,j)==type) {
+                    if(board.getType(i,j)==type && (board.getType(i-2,j)==1 || board.getType(i-1,j-1)==1
+                                                    || board.getType(i+1,j-1)==1)) {
                         x=i;
                         y=j;
                         break;
@@ -609,6 +617,7 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
             }
         }
 
+
         for (int i = 0; i < pawns.size(); i++) {
             if(pawns.get(i).getBoardXpos()==x && pawns.get(i).getBoardYpos()==y) {
                 pawns.get(i).select(true);
@@ -616,6 +625,8 @@ public class GamePanel extends JPanel implements MouseListener,ActionListener{
                 break;
             }
         }
+
+
 
         moveAsBot(x, y, type, targetX, targetY, stCheckFrom);
     }
